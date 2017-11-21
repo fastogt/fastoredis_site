@@ -101,14 +101,14 @@
                 </div>
                 <div class="side-mockup right-mockup animation">
                     <div class="slider desktop-slider">
-                        <div><img src="images/main.png"
+                        <div><img src="/images/main.png"
                                   alt="<%- site.title %> - is a cross-platform open source Redis management tool"
                                   title="<%- site.title %> Admin GUI"></div>
                     </div>
                 </div>
                 <div class="column">
                     <p>
-                        
+
                     </p>
                     <p>
                         Main big advantages of <%- site.title %>:
@@ -148,7 +148,7 @@
                 </div>
                 <div class="side-mockup left-mockup animation">
                     <div class="slider desktop-slider">
-                        <div><img src="images/common/windows/main_window_windows_more.png" alt=""></div>
+                        <div><img src="/images/common/windows/main_window_windows_more.png" alt=""></div>
                     </div>
                 </div>
             </div>
@@ -162,12 +162,12 @@
                         fully
                         divided from
                         each other.
-                        Have many opened shells for single Redis/Memcached server, or many shells for many different
+                        Have many opened shells for single Redis server, or many shells for many different
                         servers.</p>
                 </div>
                 <div class="side-mockup right-mockup animation">
                     <div class="slider desktop-slider">
-                        <div><img src="/images/common/macosx/main_window_mac.png"
+                        <div><img src="/images/redis/multi_shell.png"
                                   alt="<%- site.title %> - Multiple Shells"
                                   title="Multiple Shells"></div>
                     </div>
@@ -180,20 +180,51 @@
                 <div class="column six push-six last-special">
                     <h2>Autocompletion</h2>
                     <p> <%- site.title %> supply you with autocompletion for all Redis commands. To
-                        assist <%- site.title %>
-                        autocompletion —
-                        execute your code.
-                        Autocompletion is also available for Memcached commands.</p>
+                        assist <%- site.title %> autocompletion - execute your code.
+                    </p>
                 </div>
                 <div class="side-mockup left-mockup animation">
                     <div class="slider desktop-slider">
-                        <div><img src="/images/common/linux/autocomplete_linux.png" alt="<%- site.title %> Admin GUI"
-                                  title="Memcached commands"></div>
+                        <div><img src="/images/redis/autocomplete.png" alt="<%- site.title %> Admin GUI"
+                                  title="Redis commands"></div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <section class="row section text-light second">
+            <div class="row-content buffer even clear-after">
+                <div class="column six push-six last-special">
+                    <h2>Redis unix sockets</h2>
+                    <p>Redis have feature called <strong>Redis Unix sockets</strong>, and your server never will be
+                        visible in network, this functionality something like <strong>embedded database</strong> which
+                        works only on local machine.</p>
+                </div>
+                <div class="side-mockup left-mockup animation">
+                    <div class="slider desktop-slider" data-autoplay="5000">
+                        <div><img src="/images/common/windows/redis_unix_socket.png"
+                                  alt="<%- site.title %> - connect to redis unix sockets"
+                                  title="Redis unix sockets"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row section text-light second">
+            <div class="row-content buffer even clear-after">
+                <div class="column six push-six last-special">
+                    <h2>Redis Labs cloud</h2>
+                    <p><strong>Redis Labs</strong> is the open source home and commercial provider of Redis, we support
+                        it also.</p>
+                </div>
+                <div class="side-mockup left-mockup animation">
+                    <div class="slider desktop-slider" data-autoplay="5000">
+                        <div><img src="/images/redis/redis_labs.png" alt="<%- site.title %> - Redis Labs"
+                                  title="Redis Labs cloud"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section class="row section text-light first">
             <div class="row-content buffer even clear-after">
@@ -202,13 +233,30 @@
                     <p> Redis Cluster provides a way to run a Redis installation where data is automatically sharded
                         across
                         multiple Redis nodes. <%- site.title %> is able to work with Redis Cluster, we support discovery
-                        functionality and
-                        you can work with cluser as one server.</p>
+                        functionality and you can work with cluster as one server.</p>
                 </div>
                 <div class="side-mockup right-mockup animation">
                     <div class="slider desktop-slider">
                         <div><img src="/images/redis/cluster_workflow.png" alt="Redis Cluster workflow"
                                   title="Redis Cluster workflow"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row section text-light first">
+            <div class="row-content buffer even clear-after">
+                <div class="column six">
+                    <h2>Redis Sentinel support</h2>
+                    <p> Redis Sentinel provides high availability for Redis. In practical terms this means that using
+                        Sentinel you can create a Redis deployment that resists without human intervention to certain
+                        kind of failures. Discovery Redis Sentinel it is supper feature of <%- site.title %>.
+                    </p>
+                </div>
+                <div class="side-mockup right-mockup animation">
+                    <div class="slider desktop-slider">
+                        <div><img src="/images/redis/sentinel.png" alt="Redis Sentinel"
+                                  title="Redis Sentinel"></div>
                     </div>
                 </div>
             </div>
@@ -225,27 +273,8 @@
                 </div>
                 <div class="side-mockup left-mockup animation">
                     <div class="slider desktop-slider" data-autoplay="5000">
-                        <div><img src="images/common/macosx/ssh_dialog_mac.png" alt="<%- site.title %> - SSH protocol"
-                                  title="Access your LevelDB server using SSH protocol"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="row section text-light first">
-            <div class="row-content buffer even clear-after">
-                <div class="column six">
-                    <h2>Memcached support</h2>
-                    <p><a href="http://memcached.org">Memcached</a> is like Redis and now our program can work with it.
-                        Now you
-                        can work directly from <strong><%- site.title %> with memcached</strong> - memory object caching
-                        system.</p>
-                </div>
-                <div class="side-mockup right-mockup animation">
-                    <div class="slider desktop-slider">
-                        <div><img src="/images/common/macosx/main_window_mac.png"
-                                  alt="<%- site.title %> - Memcached GUI"
-                                  title="<%- site.title %> - Memcached GUI"></div>
+                        <div><img src="/images/common/windows/ssh.png" alt="<%- site.title %> - SSH protocol"
+                                  title="Access your Redis server using SSH protocol"></div>
                     </div>
                 </div>
             </div>
@@ -254,15 +283,39 @@
         <section class="row section text-light second">
             <div class="row-content buffer even clear-after">
                 <div class="column six push-six last-special">
-                    <h2>SSDB support</h2>
-                    <p><a href="http://ssdb.io">SSDB</a> is a high performance NoSQL database supporting many data
-                        structures, an
-                        alternative to Redis, and now our program can work with it.</p>
+                    <h2>Access your TLS/SSL servers like Microsoft Azure</h2>
+                    <p>If your have secure redis server like <strong>Microsoft Azure</strong> you also can
+                        use <%- site.title %>.</p>
                 </div>
                 <div class="side-mockup left-mockup animation">
-                    <div class="slider desktop-slider">
-                        <div><img src="/images/ssdb/ssdb_workflow.png" alt="SSDB support"
-                                  title="<%- site.title %> - SSDB support"></div>
+                    <div class="slider desktop-slider" data-autoplay="5000">
+                        <div><img src="/images/common/windows/azure.png" alt="<%- site.title %> - Microsoft Azure"
+                                  title="Access your TLS/SSL servers like Microsoft Azure"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row section text-light second">
+            <div class="row-content buffer even clear-after">
+                <div class="column six push-six last-special">
+                    <h2>TTL, Binary keys, Redis modules, UTF-8 Encoding, etc...</h2>
+                    <p>Many Redis GUI solutions have cool features but some features have only <%- site.title %>. For
+                        example:
+                        <strong>* Binary keys/value handling</strong>
+                        <strong>* TTL keys which will removed from tree when time expire time comming</strong>
+                        <strong>* Redis Modules</strong>
+                        <strong>* UTF-8 Encoding</strong>
+                        <strong>* Console commands influence to the tree without reloading</strong>
+                        <strong>* And many, many other cool features which you can find only in <%- site.title %>
+                            .</strong>
+                    </p>
+                </div>
+                <div class="side-mockup left-mockup animation">
+                    <div class="slider desktop-slider" data-autoplay="5000">
+                        <div><img src="/images/redis/json.png"
+                                  alt="<%- site.title %> - TTL, Binary keys, Redis modules, UTF-8 Encoding"
+                                  title="TTL, Binary keys, Redis modules, UTF-8 Encoding, etc..."></div>
                     </div>
                 </div>
             </div>
