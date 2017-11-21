@@ -1,42 +1,34 @@
 // config/settings.js
 module.exports = {
     project: {
-        name: 'FastoNoSQL',
-        name_lowercase: 'fastonosql',
-        version: '1.10.0',
+        name: 'FastoRedis',
+        name_lowercase: 'fastoredis',
+        version: '1.9.1',
         version_type: 'release'
     },
 
     site: {
-        name: 'FastoNoSQL',
+        name: 'FastoRedis',
         version: '1.0.0',
-        domain: 'https://fastonosql.com',
-        keywords: 'FastoNoSQL, GUI Manager, Redis GUI, Memcached GUI, SSDB GUI, LevelDB GUI, RocksDB GUI, LMDB GUI, Unqlite GUI, UpscaleDB GUI, ForestDB GUI',
-        description: 'FastoNoSQL it is GUI platform for NoSQL databases.',
-        small_description: 'FastoNoSQL - cross-platform GUI Manager for Redis, Memcached, SSDB, RocksDB, LMDB, UpscaleDB, Unqlite and ForestDB databases.',
-        large_description: 'FastoNoSQL — is a cross-platform GUI Manager for Redis, Memcached, SSDB, RocksDB, LMDB, UpscaleDB, Unqlite and ForestDB databases(i.e. Admin GUI Client). Our Desktop Client works on the most amount of Linux systems, also on Windows, Mac OS X, FreeBSD and Android platforms.',
+        domain: 'https://fastoredis.com',
+        keywords: 'FastoNoSQL, GUI Manager, Redis GUI, Redis admin tool, Redis desktop manager, Redis cluster, Redis sentinel',
+        description: 'FastoRedis (fork of FastoNoSQL) — is a cross-platform open source Redis management tool (i.e. Admin GUI).',
+        small_description: 'FastoRedis - cross-platform GUI Manager for Redis, sipported main Redis database features like: modules, cluster, sentinel, ssh tunneling.',
+        large_description: 'FastoRedis (fork of FastoNoSQL) — is a cross-platform open source Redis management tool (i.e. Admin GUI). It put the same engine that powers Redis\'s redis-cli shell. Everything you can write in redis-cli shell — you can write in Fastoredis! Our program works on the most amount of Linux systems, also on Windows, Mac OS X, FreeBSD and Android platforms.',
 
-        github_link: 'https://github.com/fastogt/fastonosql',
-        github_issues_link: 'https://github.com/fastogt/fastonosql/issues',
-        github_link_without_host: 'fastogt/fastonosql',
+        github_link: 'https://github.com/fastogt/fastoredis',
+        github_issues_link: 'https://github.com/fastogt/fastoredis/issues',
+        github_link_without_host: 'fastogt/fastoredis',
 
-        twitter_name: 'FastoNoSQL',
-        twitter_link: 'https://twitter.com/FastoNoSQL',
+        twitter_name: 'FastoRedis',
+        twitter_link: 'https://twitter.com/FastoRedis',
 
         paypal_token: 'FY5JBFRE6NP9Y',
-        google_analitics_token: 'UA-56403848-4',
+        google_analitics_token: 'UA-56403848-1',
         //data_ad_client: 'ca-pub-4299795201353238',
         //data_ad_slot: '1261996191',
 
-        supported_databases: [{'name': 'Redis', 'option': 'BUILD_WITH_REDIS'},
-            {'name': 'Memcached', 'option': 'BUILD_WITH_MEMCACHED'},
-            {'name': 'SSDB', 'option': 'BUILD_WITH_SSDB'},
-            {'name': 'LevelDB', 'option': 'BUILD_WITH_LEVELDB'},
-            {'name': 'RocksDB', 'option': 'BUILD_WITH_ROCKSDB'},
-            {'name': 'LMDB', 'option': 'BUILD_WITH_LMDB'},
-            {'name': 'Unqlite', 'option': 'BUILD_WITH_UNQLITE'},
-            {'name': 'UpscaleDB', 'option': 'BUILD_WITH_UPSCALEDB'},
-            {'name': 'ForestDB', 'option': 'BUILD_WITH_FORESTDB'}]
+        supported_databases: [{'name': 'Redis', 'option': 'BUILD_WITH_REDIS'}]
     },
 
     support: {

@@ -79,10 +79,10 @@
                 <div class="col-sm-6 text-right">
                     <% if (user.enableSubscription()) { %>
                     <button type="submit" class="btn btn-primary" id="subscription" data-fsc-action="Add,Checkout"
-                            data-fsc-item-path-value="fastonosql-subscription">
-                        Order subscription
+                            data-fsc-item-path-value="fastoredis-subscription">
+                        Order Subscription
                     </button>
-                    <strong>2.99$ / 1 Month</strong>
+                    <strong>1.99$ / 1 Month</strong>
                     <% } else if (user.getSubscriptionState() === 'active') { %>
                     <form action="/cancel_subscription" method="post">
                         <button type="submit" class="btn btn-primary">Cancel Subscription</button>
@@ -181,7 +181,7 @@
 <script id="fsc-api"
         src="https://d1f8f9xcsvx3ha.cloudfront.net/sbl/0.7.4/fastspring-builder.min.js"
         type="text/javascript"
-        data-storefront="fastogt.onfastspring.com/popup-fastonosql"
+        data-storefront="fastogt.onfastspring.com/popup-fastoredis"
         data-popup-closed="onPopupClose"
 >
 </script>
