@@ -75,14 +75,14 @@
         </div>
         <div class="col-sm-6">
             <div class="row">
-                <div class="col-sm-6">&nbsp;</div>
-                <div class="col-sm-6 text-right">
+                <div class="col-sm-5">&nbsp;</div>
+                <div class="col-sm-7 text-right">
                     <% if (user.enableSubscription()) { %>
                     <button type="submit" class="btn btn-primary" id="subscription" data-fsc-action="Add,Checkout"
                             data-fsc-item-path-value="fastoredis-subscription">
                         Order Subscription
                     </button>
-                    <strong>3.99$ / 1 Month</strong>
+                    <strong>$3.9 / 1 Month</strong>
                     <% } else if (user.getSubscriptionState() === 'active') { %>
                     <form action="/cancel_subscription" method="post">
                         <button type="submit" class="btn btn-primary">Cancel Subscription</button>
@@ -92,7 +92,7 @@
             </div>
         </div>
     </div>
-
+    <br/>
     <div class="row">
         <div class="well">
             <h3>Why do we need subscriptions?</h3>
@@ -100,7 +100,7 @@
             been published.
             We need your <strong>support</strong>, <strong>understanding</strong>, <strong>feedbacks</strong>.
             In order to develop we are introducing <strong>paid Subscriptions for users</strong>.</br>
-            The subscription gives access to <strong>individual unlimited binaries</strong> for <strong>$3.99</strong>
+            The subscription gives access to <strong>individual unlimited binaries</strong> for <strong>$3.9</strong>
             per month.
             We are waiting for your feedback! Please write any issues and proposals to <a
                     href="<%- site.github_issues_link %>" alt="Redis GUI">GitHub Issues</a>..
