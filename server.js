@@ -69,9 +69,7 @@ app.locals.site = {
     support_email_service_port: settings_config.support_email_service_port,
     support_email_service_secure: settings_config.support_email_service_secure,
     support_email: settings_config.support_email,
-    support_email_password: settings_config.support_email_password,
-
-    supported_databases: public_settings_config.site.supported_databases
+    support_email_password: settings_config.support_email_password
 };
 app.locals.project = {
     name: public_settings_config.project.name,
@@ -141,23 +139,31 @@ listener.on('connection', function (socket) {
             }); //
 
             var rpc = new (require('./app/amqprpc'))(rabbit_connection);
-            var branding_variables = '-DIS_PUBLIC_BUILD=OFF -DUSER_SPECIFIC_ID=' + in_json.id + ' -DUSER_SPECIFIC_LOGIN=' + in_json.email + ' -DUSER_SPECIFIC_PASSWORD=' + in_json.password;
-            for (var i = 0; i < app.locals.site.supported_databases.length; ++i) {
-                var sup_db = app.locals.site.supported_databases[i];
-                var found = false;
-                for (var j = 0; j < in_json.databases.length; ++j) {
-                    var sel_db = in_json.databases[j];
-                    if (sel_db === sup_db.name) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) {
-                    branding_variables += util.format(' -D%s=ON', sup_db.option);
-                } else {
-                    branding_variables += util.format(' -D%s=OFF', sup_db.option);
-                }
-            }
+            var branding_variables = '-DBUILD_WITH_REDIS=ON ' +
+                '-DBUILD_WITH_MEMCACHED=OFF ' +
+                '-DBUILD_WITH_SSDB=OFF ' +
+                '-DBUILD_WITH_LEVELDB=OFF ' +
+                '-DBUILD_WITH_ROCKSDB=OFF ' +
+                '-DBUILD_WITH_UNQLITE=OFF ' +
+                '-DBUILD_WITH_LMDB=OFF ' +
+                '-DBUILD_WITH_UPSCALEDB=OFF ' +
+                '-DBUILD_WITH_FORESTDB=OFF ' +
+                '-DBRANDING_PROJECT_BUILD_TYPE_VERSION:STRING=release ' +
+                '-DBRANDING_PROJECT_NAME:STRING=FastoRedis ' +
+                '-DBRANDING_PROJECT_VERSION:STRING=1.9.1.0 ' +
+                '-DBRANDING_PROJECT_DOMAIN:STRING=http://www.fastoredis.com ' +
+                '-DBRANDING_PROJECT_DOWNLOAD_LINK:STRING=http://www.fastoredis.com/download.html ' +
+                '-DBRANDING_PROJECT_DOWNLOAD_DIRECT_LINK:STRING=http://www.fastoredis.com/files ' +
+                '-DBRANDING_PROJECT_COMPANYNAME_DOMAIN:STRING=http://www.fastogt.com ' +
+                '-DBRANDING_PROJECT_GITHUB_FORK:STRING=https://www.github.com/fastogt/fastoredis ' +
+                '-DBRANDING_PROJECT_GITHUB_ISSUES:STRING=https://www.github.com/fastogt/fastoredis/issues ' +
+                '-DBRANDING_PROJECT_CHANGELOG_FILE:STRING=FASTOREDIS_CHANELOG ' +
+                '-DBRANDING_PROJECT_SUMMARY:STRING=Cross-platform open source Redis GUI management tool. ' +
+                '-DBRANDING_PROJECT_DESCRIPTION:STRING=FastoRedis (fork of FastoNoSQL) - is a cross-platforms open source Redis management tool (i.e. Admin GUI). It put the same engine that powers Redis\'s redis-cli shell. Everything you can write in redis-cli shell - you can write in FastoRedis! Our program works on the most amount of Linux systems, also on Windows, Mac OS X, FreeBSD and Android platforms. ' +
+                '-DIS_PUBLIC_BUILD=OFF' +
+                '-DUSER_SPECIFIC_ID=' + in_json.id + ' ' +
+                '-DUSER_SPECIFIC_LOGIN=' + in_json.email + ' ' +
+                '-DUSER_SPECIFIC_PASSWORD=' + in_json.password;
             var request_data_json = {
                 'branding_variables': branding_variables,
                 'package_type': in_json.package_type,
@@ -197,7 +203,7 @@ listener.on('connection', function (socket) {
 
 // configuration ===============================================================
 mongoose.Promise = global.Promise;
-mongoose.connect(config_db.url, { useMongoClient: true }); // connect to our database
+mongoose.connect(config_db.url, {useMongoClient: true}); // connect to our database
 
 // NEV configuration =====================
 // our persistent user model

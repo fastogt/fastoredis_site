@@ -63,7 +63,7 @@
         <div class="container intro-item">
             <div class="intro-mockup-wrapper">
                 <div class="text-center">
-                    <h1 style="color: #fff;"><%- site.title %> - GUI manager for NoSQL Databases</h1>
+                    <h1 style="color: #fff;"><%- site.title %> - Redis GUI manager</h1>
                     <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
                     <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a>
                 </div>
@@ -93,36 +93,22 @@
                 <div class="column six">
                     <h2>What is <%- site.title %>?</h2>
                     <p>
-                        <%- site.title %> it is GUI platform for NoSQL databases. Currently we support next databases:
-                    </p>
-                    <p>
-                    <ul>
-                        <li><a href="http://redis.io" target="_blank">Redis</a></li>
-                        <li><a href="http://memcached.org" target="_blank">Memcached</a></li>
-                        <li><a href="http://ssdb.io" target="_blank">SSDB</a></li>
-                        <li><a href="http://leveldb.org" target="_blank">LevelDB</a></li>
-                        <li><a href="http://rocksdb.org" target="_blank">RocksDB</a></li>
-                        <li><a href="http://unqlite.org" target="_blank">UnQLite</a></li>
-                        <li><a href="http://symas.com/mdb" target="_blank">LMDB</a></li>
-                        <li><a href="http://upscaledb.com" target="_blank">UpscaleDB</a></li>
-                        <li><a href="http://forestdb.org" target="_blank">ForestDB</a></li>
-                    </ul>
+                        <%- site.title %> (fork of FastoNoSQL) - is a cross-platform open source Redis management tool
+                        (i.e. Admin GUI). It put the same engine that powers Redis's redis-cli shell. Everything you can
+                        write in redis-cli shell — you can write in Fastoredis! Our program works on the most amount of
+                        Linux systems, also on Windows, Mac OS X, FreeBSD and Android platforms.
                     </p>
                 </div>
                 <div class="side-mockup right-mockup animation">
                     <div class="slider desktop-slider">
                         <div><img src="images/main.png"
-                                  alt="<%- site.title %> - is a cross-platform open source NoSQL management tool"
+                                  alt="<%- site.title %> - is a cross-platform open source Redis management tool"
                                   title="<%- site.title %> Admin GUI"></div>
                     </div>
                 </div>
                 <div class="column">
                     <p>
-                        For all this databases you can connect and use them in any way you need.
-                        Also <%- site.title %> is IDE tool for NoSQL which works on the most famous platforms like:
-                        Windows,
-                        Linux, MacOSX,
-                        Android, FreeBSD.
+                        
                     </p>
                     <p>
                         Main big advantages of <%- site.title %>:
