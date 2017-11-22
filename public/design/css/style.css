@@ -374,7 +374,7 @@ nav a {
 nav {
     position: relative;
     display: inline-block;
-    float: right;
+    float: left;
     clear: none;
 }
 
@@ -733,7 +733,10 @@ F .photocaption {
     ;
 }
 
-
+.subtitle {
+    color: #fff;
+    font-size: 1.25em;
+}
 /*----------------------------------------------------------------
     Blog & Portfolio
 ----------------------------------------------------------------*/
