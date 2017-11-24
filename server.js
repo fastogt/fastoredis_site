@@ -95,8 +95,7 @@ app.locals.back_end = {
 // fast spring
 app.locals.fastspring_config = {
     login: settings_config.fastspring_login,
-    password: settings_config.fastspring_password,
-    subscriptions: ['fastoredis-subscription-12-month', 'fastoredis-subscription-1-month']
+    password: settings_config.fastspring_password
 }
 
 // rabbitmq
