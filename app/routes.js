@@ -42,8 +42,12 @@ module.exports = function (app, passport, nev) {
         res.render('downloads.ejs');
     });
 
-    app.get('/build_installer_request', isLoggedIn, function (req, res) {
+    app.get('/build_installer_request', [isLoggedIn, isSubscribed], function (req, res) {
         var user = req.user;
+
+        if (user.getSubscriptionState() !== 'active') {
+            res.redirect('/profile');
+        }
 
         var walk = function (dir, done) {
             console.log('scan folder: ', dir);
@@ -282,4 +286,11 @@ function isLoggedIn(req, res, next) {
         return next();
 
     res.redirect('/');
+}
+
+function isSubscribed(req, res, next) {
+  req.user.getSubscriptionState() === 'active'
+  && next();
+
+  res.redirect('/profile');
 }
