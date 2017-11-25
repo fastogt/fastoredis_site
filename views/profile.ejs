@@ -238,7 +238,6 @@
         <div class="col-sm-8">
             <div class="row">
                 <div class="col-sm-12 text-right">
-
                     <form action="/cancel_subscription" method="post">
                         <button type="submit" class="btn btn-primary">Cancel Subscription</button>
                     </form>
@@ -330,7 +329,6 @@
     }
 
     function onPopupClose(data) {
-        console.log('onPopupClose', JSON.stringify(data));
         if (data) {
             $.ajax({
                 type: 'POST',
