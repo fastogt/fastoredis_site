@@ -115,14 +115,6 @@ rabbit_connection.on('ready', function () {
 listener.on('connection', function (socket) {
     socket.on('publish_rabbitmq', function (msg) {
         var in_json = JSON.parse(msg);
-        if (in_json.databases.length === 0) {
-            var err = Error('At least one database must be selected!');
-            console.error(err);
-            socket.emit('status_rabbitmq', {'email': in_json.email, 'progress': 100, 'message': err.message}); //
-            socket.emit('message_rabbitmq', {'email': in_json.email, 'error': err.message});
-            return;
-        }
-
         var user_package_dir = public_downloads_users_dir_abs_path + '/' + in_json.email;
         mkdirp(user_package_dir, function (err) {
             if (err) {
@@ -139,31 +131,10 @@ listener.on('connection', function (socket) {
             }); //
 
             var rpc = new (require('./app/amqprpc'))(rabbit_connection);
-            var branding_variables = '-DBUILD_WITH_REDIS=ON ' +
-                '-DBUILD_WITH_MEMCACHED=OFF ' +
-                '-DBUILD_WITH_SSDB=OFF ' +
-                '-DBUILD_WITH_LEVELDB=OFF ' +
-                '-DBUILD_WITH_ROCKSDB=OFF ' +
-                '-DBUILD_WITH_UNQLITE=OFF ' +
-                '-DBUILD_WITH_LMDB=OFF ' +
-                '-DBUILD_WITH_UPSCALEDB=OFF ' +
-                '-DBUILD_WITH_FORESTDB=OFF ' +
-                '-DBRANDING_PROJECT_BUILD_TYPE_VERSION:STRING=release ' +
-                '-DBRANDING_PROJECT_NAME:STRING=FastoRedis ' +
-                '-DBRANDING_PROJECT_VERSION:STRING=1.9.1.0 ' +
-                '-DBRANDING_PROJECT_DOMAIN:STRING=http://www.fastoredis.com ' +
-                '-DBRANDING_PROJECT_DOWNLOAD_LINK:STRING=http://www.fastoredis.com/download.html ' +
-                '-DBRANDING_PROJECT_DOWNLOAD_DIRECT_LINK:STRING=http://www.fastoredis.com/files ' +
-                '-DBRANDING_PROJECT_COMPANYNAME_DOMAIN:STRING=http://www.fastogt.com ' +
-                '-DBRANDING_PROJECT_GITHUB_FORK:STRING=https://www.github.com/fastogt/fastoredis ' +
-                '-DBRANDING_PROJECT_GITHUB_ISSUES:STRING=https://www.github.com/fastogt/fastoredis/issues ' +
-                '-DBRANDING_PROJECT_CHANGELOG_FILE:STRING=FASTOREDIS_CHANELOG ' +
-                '-DBRANDING_PROJECT_SUMMARY:STRING=Cross-platform open source Redis GUI management tool. ' +
-                '-DBRANDING_PROJECT_DESCRIPTION:STRING=FastoRedis (fork of FastoNoSQL) - is a cross-platforms open source Redis management tool (i.e. Admin GUI). It put the same engine that powers Redis\'s redis-cli shell. Everything you can write in redis-cli shell - you can write in FastoRedis! Our program works on the most amount of Linux systems, also on Windows, Mac OS X, FreeBSD and Android platforms. ' +
-                '-DIS_PUBLIC_BUILD=OFF' +
-                '-DUSER_SPECIFIC_ID=' + in_json.id + ' ' +
-                '-DUSER_SPECIFIC_LOGIN=' + in_json.email + ' ' +
-                '-DUSER_SPECIFIC_PASSWORD=' + in_json.password;
+            var branding_variables = '-DIS_PUBLIC_BUILD=OFF ' +
+                ' -DUSER_SPECIFIC_ID=' + in_json.id + ' ' +
+                ' -DUSER_SPECIFIC_LOGIN=' + in_json.email + ' ' +
+                ' -DUSER_SPECIFIC_PASSWORD=' + in_json.password;
             var request_data_json = {
                 'branding_variables': branding_variables,
                 'package_type': in_json.package_type,

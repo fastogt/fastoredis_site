@@ -75,15 +75,14 @@
             update_bar(response_json.progress, response_json.message);
         });
 
-        function send_build_request(id, user, password, platform, package_type, arch, databases) {
+        function send_build_request(id, user, password, platform, package_type, arch) {
             var build_args = {
                 "id": id,
                 "platform": platform,
                 "package_type": package_type,
                 "email": user,
                 "password": password,
-                "arch": arch,
-                "databases": databases
+                "arch": arch
             };
             var msg = JSON.stringify(build_args);
             socket.emit('publish_rabbitmq', msg);
@@ -94,14 +93,7 @@
             var os_ctrl = $('input[name=' + platform + ']:checked');
             var package_type = os_ctrl.attr('package_type');
             var arch = os_ctrl.attr('data-arch');
-            var databases = [];
-            var dbs = document.getElementsByName('database');
-            for (var i = 0; i < dbs.length; ++i) {
-                if (dbs[i].checked) {
-                    databases.push(dbs[i].value);
-                }
-            }
-            return send_build_request(id, user, password, platform, package_type, arch, databases);
+            return send_build_request(id, user, password, platform, package_type, arch);
         }
     </script>
     <script>
@@ -159,19 +151,23 @@
                     <div role="tabpanel" class="tab-pane" id="linux">
                         <div data-toggle="buttons" class="buttons-row">
                             <label class="btn btn-primary active">
-                                <input type="radio" name="linux" value="ubuntu_x64" data-arch="x86_64" package_type="DEB"
+                                <input type="radio" name="linux" value="ubuntu_x64" data-arch="x86_64"
+                                       package_type="DEB"
                                        id="option4"
                                        autocomplete="off" checked="checked"> Ubuntu x64</label>
                             <label class="btn btn-primary">
-                                <input type="radio" name="linux" value="debian_x64" data-arch="x86_64" package_type="DEB"
+                                <input type="radio" name="linux" value="debian_x64" data-arch="x86_64"
+                                       package_type="DEB"
                                        id="option5"
                                        autocomplete="off"> Debian x64</label>
                             <label class="btn btn-primary">
-                                <input type="radio" name="linux" value="centOS_x64" data-arch="x86_64" package_type="RPM"
+                                <input type="radio" name="linux" value="centOS_x64" data-arch="x86_64"
+                                       package_type="RPM"
                                        id="option6"
                                        autocomplete="off"> CentOS x64</label>
                             <label class="btn btn-primary">
-                                <input type="radio" name="linux" value="fedora_x64" data-arch="x86_64" package_type="RPM"
+                                <input type="radio" name="linux" value="fedora_x64" data-arch="x86_64"
+                                       package_type="RPM"
                                        id="option7"
                                        autocomplete="off"> Fedora x64</label>
                             <label class="btn btn-primary">
@@ -225,12 +221,6 @@
                         </div>
                     </div>
                     <div role="tabpane2" class="tab-pane form-inline" id="advanced">
-                        <div>
-                            <% for (var i = 0; i < site.supported_databases.length; ++i) { %>
-                            <input type="checkbox" name="database" value="<%- site.supported_databases[i].name %>"
-                                   checked="checked"> <%- site.supported_databases[i].name %></br>
-                            <% } %>
-                        </div>
                     </div>
                 </div>
 

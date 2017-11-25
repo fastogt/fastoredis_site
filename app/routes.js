@@ -25,7 +25,7 @@ function checkIsValidDomain(domain) {
 }
 
 module.exports = function (app, passport, nev) {
-    var fastSpring = FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
+    var fastSpring = new FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
 
 // normal routes ===============================================================
 
@@ -34,20 +34,20 @@ module.exports = function (app, passport, nev) {
         res.render('index.ejs');
     });
 
-    app.get('/download', function (req, res) {
-        res.render('download.ejs');
-    });
-
     app.get('/help', function (req, res) {
         res.render('help.ejs');
     });
 
-    app.get('/download_p', function (req, res) {
-        res.render('download_p.ejs');
+    app.get('/downloads', isLoggedIn, function (req, res) {
+        res.render('downloads.ejs');
     });
 
-    app.get('/build_installer_request', function (req, res) {
+    app.get('/build_installer_request', [isLoggedIn, isSubscribed], function (req, res) {
         var user = req.user;
+
+        if (user.getSubscriptionState() !== 'active') {
+            res.redirect('/profile');
+        }
 
         var walk = function (dir, done) {
             console.log('scan folder: ', dir);
@@ -104,7 +104,7 @@ module.exports = function (app, passport, nev) {
     });
 
     // CLEAR user packages
-    app.post('/clear_packages', function (req, res) {
+    app.post('/clear_packages', isLoggedIn, function (req, res) {
         var user = req.user;
         deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
         res.render('build_installer_request.ejs', {
@@ -189,7 +189,7 @@ module.exports = function (app, passport, nev) {
     })
 
     // CANCEL_SUBSCRIPTION ==============================
-    app.post('/cancel_subscription', function (req, res) {
+    app.post('/cancel_subscription', isLoggedIn, function (req, res) {
         var user = req.user;
 
         if (user.getSubscriptionState() === 'active') {
@@ -286,4 +286,11 @@ function isLoggedIn(req, res, next) {
         return next();
 
     res.redirect('/');
+}
+
+function isSubscribed(req, res, next) {
+  req.user.getSubscriptionState() === 'active'
+  && next();
+
+  res.redirect('/profile');
 }
