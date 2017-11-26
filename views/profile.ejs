@@ -48,14 +48,13 @@
                 <strong>email</strong>: <%= user.email %><br>
                 <!-- <strong>password</strong>: <%= user.password %> -->
             </p>
-            <a href="/" class="btn btn-warning btn-md pull-right"><span class="glyphicon glyphicon-home"></span>
-                Home</a>
         </div>
     </div>
 
     <% if (message.length > 0) { %>
     <div class="alert alert-danger"><%= message %></div>
     <% } %>
+
     <% if (user.getSubscriptionState() && user.getSubscriptionState() !== 'active') { %>
     <div class="alert alert-warning">Your subscription is <%= user.getSubscriptionState() %>. Resubscribe or contact the
         administrator.
