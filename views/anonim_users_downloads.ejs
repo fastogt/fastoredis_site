@@ -10,8 +10,8 @@
 
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="design/css/layers.min.css" media="screen">
-    <link rel="stylesheet" href="design/css/style.css" media="screen">
+    <link rel="stylesheet" href="<%= site.domain %>/design/css/layers.min.css" media="screen">
+    <link rel="stylesheet" href="<%= site.domain %>/design/css/style.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans:400italic,700italic,400,700'
           rel='stylesheet' type='text/css'>
 
@@ -76,143 +76,141 @@
         </div>
     </div>
 
-    <div id="main" class="row">
-        <div class="row-content buffer-left buffer-right buffer-bottom clear-after">
-            <div class="post-area clear-after">
-                <div class="container">
-                    <div class="well">
+    <section class="row section text-light second">
+        <div class="container">
+            <h3>
+                <p>Download <%= site.small_description %></p>
+                <span style="color:red">After registration you can get more newer version, in current page you can download some previous stable version.</span>
+            </h3>
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
                         <h3>
-                            <p>Download <%= site.small_description %></p>
-                            <span style="color:red">After registration you can get more newer version, in current page you can download some previous stable version.</span>
+                            <img src="/images/macosx.png" alt="" title="">
+                            <%= project.name %> <%= project.anonim_version %> <span
+                                    class="dowm-os">For Mac OS X:</span>
                         </h3>
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>
-                                        <img src="/images/macosx.png" alt="" title="">
-                                        <%= project.name %> <%= project.anonim_version %> <span class="dowm-os">For Mac OS X:</span>
-                                    </h3>
-                                </div>
-                            </div>
-                            <!-- version -->
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('macosx', 'x86_64', '.dmg')"> 64 bit Mac OS
-                                    X <%= project.anonim_version %>
-                                    Installer
-                                    (.dmg)
-                                </button>
-                            </p>
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('macosx', 'x86_64', '.zip')"> 64 bit Application
-                                    Archive <%= project.anonim_version %> (.zip)
-                                </button>
-                            <p>
-                        </div>
-
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>
-                                        <img src="/images/windows.png" alt="" title="">
-                                        <%= project.name %> <%= project.anonim_version %> <span class="dowm-os">For Windows:</span>
-                                    </h3>
-                                </div>
-                            </div>
-                            <!-- version -->
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('windows', 'x86_64', '.exe')"> 64 bit
-                                    Windows <%= project.anonim_version %>
-                                    Installer
-                                    (.exe)
-                                </button>
-                            </p>
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('windows', 'x86_64', '.zip')"> 64 bit Application
-                                    Archive <%= project.anonim_version %> (.zip)
-                                </button>
-                            </p>
-                        </div>
-
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>
-                                        <img src="/images/linux.png" alt="" title="">
-                                        <%= project.name %> <%= project.anonim_version %> <span class="dowm-os">For Linux:</span>
-                                    </h3>
-                                </div>
-                            </div>
-                            <!-- version -->
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('linux', 'x86_64', '.deb')"> 64 bit
-                                    Debian/Ubuntu <%= project.anonim_version %>
-                                    Package (.deb)
-                                </button>
-                            </p>
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('linux', 'x86_64', '.rpm')"> 64 bit
-                                    Fedora/openSUSE <%= project.anonim_version %>
-                                    Package (.rpm)
-                                </button>
-                            </p>
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('linux', 'x86_64', '.tar.gz')"> 64 bit Application
-                                    Archive <%= project.anonim_version %> (.tar.gz)
-                                </button>
-                            <p>
-                        </div>
-
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>
-                                        <img src="/images/android.png" alt="" title="">
-                                        <%= project.name %> <%= project.anonim_version %> <span class="dowm-os">For Android:</span>
-                                    </h3>
-                                </div>
-                            </div>
-                            <!-- version -->
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('android', 'armeabi-v7a', '.apk')">
-                                    Android <%= project.anonim_version %>
-                                    Package
-                                    (.apk)
-                                </button>
-                            </p>
-                        </div>
-
-                        <div class="row">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>
-                                        <img src="/images/freebsd.png" alt="" title="">
-                                        <%= project.name %> <%= project.anonim_version %> <span class="dowm-os">For FreeBSD:</span>
-                                    </h3>
-                                </div>
-                            </div>
-                            <!-- version -->
-                            <p>
-                                <button type="button" id="build_button" class="btn btn-primary"
-                                        onclick="download('freebsd', 'x86_64', '.tar.gz')"> 64 bit
-                                    FreeBSD <%= project.anonim_version %>
-                                    Package (.tar.gz)
-                                </button>
-                            </p>
-                        </div>
-
                     </div>
                 </div>
-            </div><!-- post-area -->
-        </div><!-- row-content -->
-    </div><!-- row -->
+                <!-- version -->
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('macosx', 'x86_64', '.dmg')"> 64 bit Mac OS
+                        X <%= project.anonim_version %>
+                        Installer
+                        (.dmg)
+                    </button>
+                </p>
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('macosx', 'x86_64', '.zip')"> 64 bit Application
+                        Archive <%= project.anonim_version %> (.zip)
+                    </button>
+                <p>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>
+                            <img src="/images/windows.png" alt="" title="">
+                            <%= project.name %> <%= project.anonim_version %> <span
+                                    class="dowm-os">For Windows:</span>
+                        </h3>
+                    </div>
+                </div>
+                <!-- version -->
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('windows', 'x86_64', '.exe')"> 64 bit
+                        Windows <%= project.anonim_version %>
+                        Installer
+                        (.exe)
+                    </button>
+                </p>
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('windows', 'x86_64', '.zip')"> 64 bit Application
+                        Archive <%= project.anonim_version %> (.zip)
+                    </button>
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>
+                            <img src="/images/linux.png" alt="" title="">
+                            <%= project.name %> <%= project.anonim_version %> <span
+                                    class="dowm-os">For Linux:</span>
+                        </h3>
+                    </div>
+                </div>
+                <!-- version -->
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('linux', 'x86_64', '.deb')"> 64 bit
+                        Debian/Ubuntu <%= project.anonim_version %>
+                        Package (.deb)
+                    </button>
+                </p>
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('linux', 'x86_64', '.rpm')"> 64 bit
+                        Fedora/openSUSE <%= project.anonim_version %>
+                        Package (.rpm)
+                    </button>
+                </p>
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('linux', 'x86_64', '.tar.gz')"> 64 bit Application
+                        Archive <%= project.anonim_version %> (.tar.gz)
+                    </button>
+                <p>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>
+                            <img src="/images/android.png" alt="" title="">
+                            <%= project.name %> <%= project.anonim_version %> <span
+                                    class="dowm-os">For Android:</span>
+                        </h3>
+                    </div>
+                </div>
+                <!-- version -->
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('android', 'armeabi-v7a', '.apk')">
+                        Android <%= project.anonim_version %>
+                        Package
+                        (.apk)
+                    </button>
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>
+                            <img src="/images/freebsd.png" alt="" title="">
+                            <%= project.name %> <%= project.anonim_version %> <span
+                                    class="dowm-os">For FreeBSD:</span>
+                        </h3>
+                    </div>
+                </div>
+                <!-- version -->
+                <p>
+                    <button type="button" id="build_button" class="btn btn-primary"
+                            onclick="download('freebsd', 'x86_64', '.tar.gz')"> 64 bit
+                        FreeBSD <%= project.anonim_version %>
+                        Package (.tar.gz)
+                    </button>
+                </p>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer role="contentinfo">
