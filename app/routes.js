@@ -38,8 +38,16 @@ module.exports = function (app, passport, nev) {
         res.render('help.ejs');
     });
 
-    app.get('/downloads', isLoggedIn, function (req, res) {
-        res.render('downloads.ejs');
+    app.get('/anonim_users_downloads', function (req, res) {
+        res.render('anonim_users_downloads.ejs');
+    });
+
+    app.get('/registered_users_downloads', isLoggedIn, function (req, res) {
+        res.render('registered_users_downloads.ejs');
+    });
+
+    app.get('/subscribed_users_downloads', isSubscribed, function (req, res) {
+        res.render('subscribed_users_downloads.ejs');
     });
 
     app.get('/build_installer_request', isSubscribed, function (req, res) {
@@ -143,7 +151,6 @@ module.exports = function (app, passport, nev) {
     // SUBSCRIPTION =============================
     app.post('/subscription', isLoggedIn, function (req, res) {
         var user = req.user;
-
         if (user.enableSubscription()) {
             var body = JSON.parse(req.body.data);
 
@@ -187,9 +194,7 @@ module.exports = function (app, passport, nev) {
     // CANCEL_SUBSCRIPTION ==============================
     app.post('/cancel_subscription', isSubscribed, function (req, res) {
         var user = req.user;
-
         var subscr = user.getSubscription();
-
         fastSpring.cancelSubscription(subscr.subscriptionId)
             .then(function (data) {
                 var answer = JSON.parse(data);

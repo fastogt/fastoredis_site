@@ -12,7 +12,7 @@ var auth_config = require('./config/auth.js');
 
 var root_abs_path = __dirname;
 var public_dir_abs_path = root_abs_path + '/public';
-var public_downloads_dir_abs_path = public_dir_abs_path + '/downloads';
+var public_downloads_dir_abs_path = public_dir_abs_path + '/subscribed_users_downloads';
 var public_downloads_users_dir_abs_path = public_downloads_dir_abs_path + '/users';
 // set up ======================================================================
 // get all the tools we need
@@ -74,8 +74,9 @@ app.locals.site = {
 app.locals.project = {
     name: public_settings_config.project.name,
     name_lowercase: public_settings_config.project.name_lowercase,
-    version: public_settings_config.project.version,
-    version_type: public_settings_config.project.version_type
+    anonim_version: public_settings_config.project.anonim_version,
+    registered_version: public_settings_config.project.registered_version,
+    subscribed_version: public_settings_config.project.subscribed_version
 };
 app.locals.author = {
     name: public_settings_config.support.name,
@@ -175,7 +176,7 @@ listener.on('connection', function (socket) {
 
 // configuration ===============================================================
 mongoose.Promise = global.Promise;
-mongoose.connect(config_db.url, {useMongoClient: true}); // connect to our database
+mongoose.connect(config_db.url, { useMongoClient: true }); // connect to our database
 
 // NEV configuration =====================
 // our persistent user model

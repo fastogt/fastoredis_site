@@ -104,10 +104,11 @@
                             </li>
                             <li>
                                 <i class="material-icons icon-conditions">get_app</i>
-                                <span style="color:red"><%= project.version %> version</span>
+                                <span style="color:red"><%= project.registered_version %> version</span>
                             </li>
                         </ul>
-                        <a href="/downloads" class="btn btn-success download btn-subscription">Download</a>
+                        <a href="/registered_users_downloads"
+                           class="btn btn-success download btn-subscription">Download</a>
                     </div>
                 </div>
                 <div class="col-sm-3 box-subscription">
@@ -247,12 +248,14 @@
         </div>
         <% } else if (user.getSubscriptionState() === 'active') { %>
         <div class="col-sm-4">
-            <a href="/downloads" class="btn btn-success download">Download</a>
+            <a href="/subscribed_users_downloads" class="btn btn-success download">Download</a>
             <form action="/build_installer_request" method="get" class="btn-verification">
                 <button type="submit" class="btn btn-primary">
                     Build last stable<%= project.name %> version
                 </button>
             </form>
+            <a href="skype:<%- author.contact_skype %>"><%- author.contact_skype %></a>
+            <a href="mailto:<%- author.contact_mail %>"><%- author.contact_mail %></a>
         </div>
         <div class="col-sm-8">
             <div class="row">
@@ -260,8 +263,6 @@
                     <form action="/cancel_subscription" method="post">
                         <button type="submit" class="btn btn-primary">Cancel Subscription</button>
                     </form>
-                    <a href="skype:<%- author.contact_skype %>"><%- author.contact_skype %></a>
-                    <a href="mailto:<%- author.contact_mail %>"><%- author.contact_mail %></a>
                 </div>
             </div>
         </div>
