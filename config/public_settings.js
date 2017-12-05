@@ -5,16 +5,16 @@ module.exports = {
         name_lowercase: 'fastoredis',
         anonim_version: '1.9.1',
         registered_version: '1.10.0',
-        subscribed_version: '1.11.0'
+        subscribed_version: '1.12.0'
     },
 
     site: {
         name: 'FastoRedis',
         version: '1.0.0',
         domain: 'https://fastoredis.com',
-        keywords: 'FastoNoSQL, GUI Manager, Redis GUI, Redis admin tool, Redis desktop manager, Redis cluster, Redis sentinel',
+        keywords: 'fastoredis, gui, manager, redis, client, admin, tool, desktop, cluster, sentinel, streams, mac os x, linux, freebsd, windows, android',
         description: 'FastoRedis (fork of FastoNoSQL) - is a cross-platform open source Redis management tool (i.e. Admin GUI).',
-        small_description: 'FastoRedis - cross-platform GUI Manager for Redis, supported main Redis database features like: modules, cluster, sentinel, ssh tunneling.',
+        small_description: 'FastoRedis - cross-platform client for Redis, supported main Redis database features like: modules, cluster, sentinel, ssh tunneling.',
         large_description: 'FastoRedis (fork of FastoNoSQL) - is a cross-platform open source Redis management tool (i.e. Admin GUI). It put the same engine that powers Redis\'s redis-cli shell. Everything you can write in redis-cli shell - you can write in Fastoredis! Our program works on the most amount of Linux systems, also on Windows, Mac OS X, FreeBSD and Android platforms.',
 
         github_link: 'https://github.com/fastogt/fastoredis',
