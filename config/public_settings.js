@@ -3,9 +3,7 @@ module.exports = {
     project: {
         name: 'FastoRedis',
         name_lowercase: 'fastoredis',
-        anonim_version: '1.9.1',
-        registered_version: '1.10.0',
-        subscribed_version: '1.12.0'
+        version: '1.12.0'
     },
 
     site: {

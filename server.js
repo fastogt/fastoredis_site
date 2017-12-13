@@ -74,9 +74,7 @@ app.locals.site = {
 app.locals.project = {
     name: public_settings_config.project.name,
     name_lowercase: public_settings_config.project.name_lowercase,
-    anonim_version: public_settings_config.project.anonim_version,
-    registered_version: public_settings_config.project.registered_version,
-    subscribed_version: public_settings_config.project.subscribed_version
+    version: public_settings_config.project.version
 };
 app.locals.author = {
     name: public_settings_config.support.name,
@@ -176,7 +174,7 @@ listener.on('connection', function (socket) {
 
 // configuration ===============================================================
 mongoose.Promise = global.Promise;
-mongoose.connect(config_db.url, { useMongoClient: true }); // connect to our database
+mongoose.connect(config_db.url, {useMongoClient: true}); // connect to our database
 
 // NEV configuration =====================
 // our persistent user model
