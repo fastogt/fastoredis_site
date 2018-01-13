@@ -34,6 +34,14 @@ module.exports = function (app, passport, nev) {
         res.render('index.ejs');
     });
 
+    app.get('/private_policy', function (req, res) {
+        res.render('private_policy.ejs');
+    });
+
+    app.get('/term_of_use', function (req, res) {
+        res.render('term_of_use.ejs');
+    });
+
     app.get('/help', function (req, res) {
         res.render('help.ejs');
     });
