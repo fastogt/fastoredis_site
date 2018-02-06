@@ -26,6 +26,7 @@ var flash = require('connect-flash');
 var amqp = require('amqp');
 var mkdirp = require('mkdirp');
 const util = require('util');
+var net = require('net');
 
 var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -74,7 +75,9 @@ app.locals.site = {
 app.locals.project = {
     name: public_settings_config.project.name,
     name_lowercase: public_settings_config.project.name_lowercase,
-    version: public_settings_config.project.version
+    version: public_settings_config.project.version,
+    port: settings_config.app_port,
+    domain: public_settings_config.project.domain
 };
 app.locals.author = {
     name: public_settings_config.support.name,
@@ -96,7 +99,7 @@ app.locals.back_end = {
 app.locals.fastspring_config = {
     login: settings_config.fastspring_login,
     password: settings_config.fastspring_password
-}
+};
 
 // rabbitmq
 var rabbit_connection = amqp.createConnection({
@@ -258,3 +261,33 @@ require('./app/routes.js')(app, passport, nev); // load our routes and pass in o
 app.listen(port);
 console.log('Http server ready for requests');
 server.listen(app.locals.back_end.socketio_port);
+
+var application_server = net.createServer(onClientConnected);
+
+function onClientConnected(sock) {
+    var remoteAddress = sock.remoteAddress + ':' + sock.remotePort;
+    console.log('new client connected: %s', remoteAddress);
+    sock.setEncoding('utf8');
+
+    sock.on('data', function (data) {
+        console.log('%s data: %s', remoteAddress, data);
+        if (data === 'VERSION') {
+            sock.write(app.locals.project.version);
+            sock.end();
+            sock.destroy();
+        } else {
+            sock.end();
+            sock.destroy();
+        }
+    });
+    sock.on('close', function () {
+        console.log('connection from %s closed', remoteAddress);
+    });
+    sock.on('error', function (err) {
+        console.log('Connection %s error: %s', remoteAddress, err.message);
+    });
+}
+
+application_server.listen(app.locals.project.port, app.locals.project.domain, function () {
+    console.log('server listening to %j', application_server.address());
+});
