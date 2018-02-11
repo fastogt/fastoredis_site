@@ -268,6 +268,7 @@ function version(args, opt, callback) {
 }
 
 function statistic(args, opt, callback) {
+    console.log(args);
     callback(null, 'OK');
 }
 
