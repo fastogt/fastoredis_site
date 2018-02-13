@@ -262,17 +262,50 @@ console.log('Http server ready for requests');
 server.listen(app.locals.back_end.socketio_port);
 
 var json_rpc2_server = json_rpc2.Server.$create();
+json_rpc2_server.on('error', function (err) {
+    console.log(err);
+});
 
 function version(args, opt, callback) {
     callback(null, app.locals.project.version);
 }
 
 function statistic(args, opt, callback) {
+    if (!args || !args.hasOwnProperty('os') || !args.hasOwnProperty('project')) {
+        callback('invalid arguments', null);
+        return;
+    }
+
     console.log("statistic:", args);
+    var os = {
+        name: args.os.name,
+        version: args.os.version,
+        arch: args.os.arch
+    };
+    var proj = {
+        name: args.project.name,
+        version: args.project.version,
+        arch: args.project.arch,
+        exec_count: args.project.exec_count
+    };
+    if (args.project.hasOwnProperty("owner")) {
+        proj.owner = args.project.owner;
+    }
+    var new_stat = new Statistic({os: os, project: proj});
+    new_stat.save(function (err) {
+        if (err) {
+            console.error('failed to save statistic request: ', err);
+        }
+    });
     callback(null, 'OK');
 }
 
 function is_subscribed(args, opt, callback) {
+    if (!args) {
+        callback('invalid arguments', null);
+        return;
+    }
+
     console.log("is_subscribed:", args);
     callback(null, 'OK');
 }
