@@ -301,13 +301,31 @@ function statistic(args, opt, callback) {
 }
 
 function is_subscribed(args, opt, callback) {
-    if (!args) {
+    if (!args || !args.hasOwnProperty('email') || !args.hasOwnProperty('password')) {
         callback('invalid arguments', null);
         return;
     }
 
     console.log("is_subscribed:", args);
-    callback(null, 'OK');
+    var mongoose = require('mongoose');
+    var User = mongoose.model("User");
+    User.findOne({'email': args.email}, function (err, user) {
+        // if there are any errors, return the error
+        if (err) {
+            return callback(err, null);
+        }
+
+        // if no user is found, return the message
+        if (!user) {
+            return callback('User with email:' + args.email + ' not found.', null);
+        }
+
+        if (!user.validHexedPassword(args.password)) {
+            return callback('Oops! Wrong password.', null);
+        }
+
+        return callback(null, 'OK');
+    });
 }
 
 json_rpc2_server.expose('version', version);
