@@ -43,6 +43,9 @@ var server = https.createServer({
 var io = require('socket.io');
 var listener = io.listen(server);
 
+// statistic
+var Statistic = require('./app/models/statistic');
+
 // settings
 app.locals.site = {
     title: public_settings_config.site.name,
