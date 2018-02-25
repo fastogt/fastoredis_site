@@ -6,7 +6,7 @@ var crypto = require('crypto');
 var userSchema = mongoose.Schema({
     email: String,
     password: String,
-    created_date: Date,
+    created_date: {type: Date, default: Date.now},
     subscription: {
         type: String,
         default: ''

@@ -75,25 +75,21 @@
             update_bar(response_json.progress, response_json.message);
         });
 
-        function send_build_request(id, user, password, platform, package_type, arch) {
-            var build_args = {
-                "id": id,
-                "platform": platform,
-                "package_type": package_type,
-                "email": user,
-                "password": password,
-                "arch": arch
-            };
-            var msg = JSON.stringify(build_args);
-            socket.emit('publish_rabbitmq', msg);
-        }
-
-        function send_build_request_local(id, user, password) {
+        function send_build_request_local(id, email) {
             var platform = $('.nav-tabs .active > a').attr('aria-controls');
             var os_ctrl = $('input[name=' + platform + ']:checked');
             var package_type = os_ctrl.attr('package_type');
             var arch = os_ctrl.attr('data-arch');
-            return send_build_request(id, user, password, platform, package_type, arch);
+
+            var build_args = {
+                "id": id,
+                "platform": platform,
+                "package_type": package_type,
+                "email": email,
+                "arch": arch
+            };
+            var msg = JSON.stringify(build_args);
+            socket.emit('publish_rabbitmq', msg);
         }
     </script>
     <script>
@@ -265,7 +261,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" id="build_button" class="btn btn-primary"
-                            onclick="send_build_request_local('<%- user._id %>', '<%- user.email %>', '<%- user.password %>')">
+                            onclick="send_build_request_local('<%- user._id %>', '<%- user.email %>')">
                         Start build
                     </button>
                 </div>
