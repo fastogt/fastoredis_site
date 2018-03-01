@@ -41,7 +41,7 @@ userSchema.methods.validPassword = function (password) {
 
 // enable subscription
 userSchema.methods.enableSubscription = function() {
-    return (!this.subscription_state || this.subscription_state === 'canceled');
+    return return (!this.subscription_state || this.subscription_state === 'canceled' || this.subscription_state === 'deactivated');
 };
 
 // get subscription info
