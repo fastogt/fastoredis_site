@@ -4,6 +4,14 @@ var crypto = require('crypto');
 
 // define the schema for our user model
 var userSchema = mongoose.Schema({
+    first_name: {
+      type: String,
+      default: 'Unknown'
+    },
+    last_name: {
+      type: String,
+      default: 'Unknown'
+    },
     email: String,
     password: String,
     created_date: {type: Date, default: Date.now},
@@ -40,8 +48,10 @@ userSchema.methods.validPassword = function (password) {
 };
 
 // enable subscription
-userSchema.methods.enableSubscription = function() {
-    return (!this.subscription_state || this.subscription_state === 'canceled');
+userSchema.methods.enableSubscription = function () {
+    return (!this.subscription_state ||
+        this.subscription_state === 'canceled' ||
+        this.subscription_state === 'deactivated');
 };
 
 // get subscription info
