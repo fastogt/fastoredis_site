@@ -75,7 +75,7 @@
             update_bar(response_json.progress, response_json.message);
         });
 
-        function send_build_request_local(id, email) {
+        function send_build_request(id, email) {
             var platform = $('.nav-tabs .active > a').attr('aria-controls');
             var os_ctrl = $('input[name=' + platform + ']:checked');
             var package_type = os_ctrl.attr('package_type');
@@ -261,7 +261,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" id="build_button" class="btn btn-primary"
-                            onclick="send_build_request_local('<%- user._id %>', '<%- user.email %>')">
+                            onclick="send_build_request('<%- user._id %>', '<%- user.email %>')">
                         Start build
                     </button>
                 </div>

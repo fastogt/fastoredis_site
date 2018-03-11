@@ -1,6 +1,6 @@
 var https = require('https')
 
-function FastSpring (login, password) {
+function FastSpring(login, password) {
     var self = this;
 
     this._login = login;
@@ -52,7 +52,8 @@ function FastSpring (login, password) {
         getOrder: FastSpring.prototype.getOrder.bind(this),
         getSubscription: FastSpring.prototype.getSubscription.bind(this),
         cancelSubscription: FastSpring.prototype.cancelSubscription.bind(this),
-        checkSubscriptionState: FastSpring.prototype.checkSubscriptionState.bind(this)
+        checkSubscriptionState: FastSpring.prototype.checkSubscriptionState.bind(this),
+        getActualSubscription: FastSpring.prototype.getActualSubscription.bind(this)
     }
 }
 

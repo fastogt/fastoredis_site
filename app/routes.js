@@ -2,8 +2,9 @@
 var User = require('../app/models/user');
 
 var fs = require('fs');
-var path = require('path');
+var path_module = require('path');
 var FastSpring = require('./fastspring');
+var MailerLite = require('./mailer_lite');
 
 function deleteFolderRecursive(path) {
     if (fs.existsSync(path)) {
@@ -26,12 +27,17 @@ function checkIsValidDomain(domain) {
 
 module.exports = function (app, passport, nev) {
     var fastSpring = new FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
+    var mailerLite = new MailerLite();
 
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
     app.get('/', function (req, res) {
         res.render('index.ejs');
+    });
+
+    app.get('/help', function (req, res) {
+        res.render('help.ejs');
     });
 
     app.get('/private_policy', function (req, res) {
@@ -42,24 +48,36 @@ module.exports = function (app, passport, nev) {
         res.render('term_of_use.ejs');
     });
 
-    app.get('/help', function (req, res) {
-        res.render('help.ejs');
-    });
-
     app.get('/anonim_users_downloads', function (req, res) {
         res.render('anonim_users_downloads.ejs');
-        // res.render('login.ejs', {message: req.flash('loginMessage')});
+        //res.render('login.ejs', {message: req.flash('loginMessage')});
     });
 
     app.get('/registered_users_downloads', isLoggedIn, function (req, res) {
         res.render('registered_users_downloads.ejs');
     });
 
-    app.get('/subscribed_users_downloads', isSubscribed, function (req, res) {
+    app.get('/subscribed_users_downloads', function (req, res, next) {
+        var subscr = req.user.getSubscription();
+        if (!subscr) {
+            res.redirect('/profile');
+        }
+
+        fastSpring.checkSubscriptionState('active', subscr.subscriptionId)
+            .then(function (result) {
+                if (result) {
+                    return next();
+                }
+
+                res.redirect('/profile');
+            }).catch(function (error) {
+            res.redirect('/profile');
+        });
+    }, function (req, res) {
         res.render('subscribed_users_downloads.ejs');
     });
 
-    app.get('/build_installer_request', isSubscribed, function (req, res) {
+    app.get('/build_installer_request', User.checkSubscriptionStatus(app, 'active'), function (req, res) {
         var user = req.user;
 
         var walk = function (dir, done) {
@@ -75,7 +93,7 @@ module.exports = function (app, passport, nev) {
                 }
                 list.forEach(function (file) {
                     var file_name = file;
-                    file = path.resolve(dir, file);
+                    file = path_module.resolve(dir, file);
                     fs.stat(file, function (err, stat) {
                         if (err) {
                             return done(err, []);
@@ -117,7 +135,7 @@ module.exports = function (app, passport, nev) {
     });
 
     // CLEAR user packages
-    app.post('/clear_packages', isSubscribed, function (req, res) {
+    app.post('/clear_packages', User.checkSubscriptionStatus(app, 'active'), function (req, res) {
         var user = req.user;
         deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
         res.render('build_installer_request.ejs', {
@@ -142,6 +160,7 @@ module.exports = function (app, passport, nev) {
                         }
                     });
 
+                    console.log('Success. Set subscription.');
                     res.render('profile.ejs', {
                         user: req.user,
                         message: req.flash('statusProfileMessage')
@@ -150,11 +169,28 @@ module.exports = function (app, passport, nev) {
                 console.error('getSubscription: ', error);
             });
         } else {
+            console.error('Not found `subscr`.', subscr);
             res.render('profile.ejs', {
                 user: req.user,
                 message: req.flash('statusProfileMessage')
             });
         }
+    });
+
+    app.post('/updateProfile', isLoggedIn, function (req, res) {
+        var user = req.user;
+
+        user.set({
+            first_name: req.body.firstName.trim(),
+            last_name: req.body.lastName.trim()
+        });
+
+        user.save(function (err) {
+            if (err) {
+                console.error('Update profile error!');
+            }
+            res.redirect('/profile');
+        });
     });
 
     // SUBSCRIPTION =============================
@@ -198,10 +234,10 @@ module.exports = function (app, passport, nev) {
         } else {
             return res.status(500).send('ERROR: Subscription is already exist!');
         }
-    })
+    });
 
     // CANCEL_SUBSCRIPTION ==============================
-    app.post('/cancel_subscription', isSubscribed, function (req, res) {
+    app.post('/cancel_subscription', User.checkSubscriptionStatus(app, 'active'), function (req, res) {
         var user = req.user;
         var subscr = user.getSubscription();
         fastSpring.cancelSubscription(subscr.subscriptionId)
@@ -215,7 +251,7 @@ module.exports = function (app, passport, nev) {
             }).catch(function (error) {
             console.log('cancelSubscription: ', error);
         });
-    })
+    });
 
     // LOGOUT ==============================
     app.get('/logout', function (req, res) {
@@ -262,12 +298,28 @@ module.exports = function (app, passport, nev) {
             if (err) {
                 return res.status(404).send('ERROR: sending confirmation email FAILED');
             }
+
             if (!user) {
                 return res.status(404).send('ERROR: confirming temp user FAILED');
             }
 
             var email = user.email;
-            console.log("confirm message sended to: " + email + ", error: " + err);
+
+            if (user.email_subscription) {
+                mailerLite.addNewSubscriberToGroup('9116984', {
+                    email: email,
+                    name: user.first_name,
+                    fields: {
+                        last_name: user.last_name
+                    }
+                }).then(function () {
+                    console.log("Email subscription is completed!");
+                }).catch(function (err_mailer) {
+                    console.error("Email subscription failed, error: " + err_mailer);
+                });
+            }
+
+            console.log("confirm message sent to: " + email);
             res.render('after_confirm.ejs');
         });
     });
@@ -301,6 +353,7 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
+// Note: will be deleted
 function isSubscribed(req, res, next) {
     if (req.user.getSubscriptionState() === 'active') {
         return next();
