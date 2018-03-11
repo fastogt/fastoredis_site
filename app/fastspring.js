@@ -102,10 +102,25 @@ FastSpring.prototype.cancelSubscription = function (id) {
  */
 FastSpring.prototype.checkSubscriptionState = function (state, id) {
   return this.getSubscription(id)
-        .then(function (data) {
-            var subscription = JSON.parse(data)
-            return subscription.state === state
-        })
+      .then(function (data) {
+          var subscription = JSON.parse(data)
+          return subscription.state === state
+      })
+}
+
+/**
+ * Get current subscription
+ *
+ * @param state {String} - 'canceled', 'active' & etc.
+ * @param id {String} - subscription id
+ * @returns {Promise} - result is actual subscription, if subscription not change - false
+ */
+FastSpring.prototype.getActualSubscription = function (state, id) {
+  return this.getSubscription(id)
+      .then(function (data) {
+          var subscription = JSON.parse(data)
+          return subscription.state !== state ? subscription.state : false
+      })
 }
 
 module.exports = FastSpring;
