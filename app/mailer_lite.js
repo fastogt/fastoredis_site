@@ -31,7 +31,7 @@ function MailerLite() {
                     reject(new Error('Failed response: ' + response.statusCode));
                 }
 
-                var str = ''
+                var str = '';
                 response.on('data', function (chunk) {
                     str += chunk;
                 });
@@ -56,7 +56,8 @@ function MailerLite() {
 
     return {
         addNewSubscriber: MailerLite.prototype.addNewSubscriber.bind(this),
-        addNewSubscriberToGroup: MailerLite.prototype.addNewSubscriberToGroup.bind(this)
+        addNewSubscriberToGroup: MailerLite.prototype.addNewSubscriberToGroup.bind(this),
+        updateSubscriber: MailerLite.prototype.updateSubscriber.bind(this)
     }
 }
 
@@ -72,7 +73,7 @@ MailerLite.prototype.addNewSubscriberToGroup = function (groupId, params) {
     var data = JSON.stringify(params);
 
     return this._request('POST', path, data);
-}
+};
 
 /**
  * Add new single subscriber
@@ -85,6 +86,20 @@ MailerLite.prototype.addNewSubscriber = function (params) {
     var data = JSON.stringify(params);
 
     return this._request('POST', path, data);
-}
+};
+
+/**
+ * Update single subscriber
+ *
+ * @param {Object} id/email
+ * @param {Object} params - {"type": "unsubscribed", "fields": {"name": "Demo", "company": "MailerLite"}}
+ * @returns {Promise}
+ */
+MailerLite.prototype.updateSubscriber = function (id, params) {
+    var path = '/api/v2/subscribers/' + id;
+    var data = JSON.stringify(params);
+
+    return this._request('PUT', path, data);
+};
 
 module.exports = MailerLite;
