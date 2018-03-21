@@ -308,6 +308,10 @@ function statistic(args, opt, callback) {
 }
 
 function is_subscribed(args, opt, callback) {
+    const UNSUBSCRIBED_USER = 0;
+    const SUBSCRIBED_USER = 1;
+    const TRIAL_DAYS_COUNT = 15;
+
     if (!args || !args.hasOwnProperty('email') || !args.hasOwnProperty('password')) {
         callback('invalid arguments', null);
         return;
@@ -332,21 +336,40 @@ function is_subscribed(args, opt, callback) {
             return callback('Wrong password', null);
         }
 
-        if (user.subscription) {
-            var subscription = JSON.parse(user.subscription);
-
-            fastSpring.checkSubscriptionState('active', subscription.subscriptionId)
-                .then(function (isSubscribed) {
-                    if (isSubscribed) {
-                        return callback(null, 'OK');
-                    }
-                    return callback('Invalid subscription', null);
-                }).catch(function (error) {
-                return callback(error, null);
-            });
-        } else {
-            return callback('Please subscribe to app in your profile page', null);
+        if (user.exec_count === 0) {
+            var end_date = new Date();
+            end_date.setDate(end_date.getDate() + TRIAL_DAYS_COUNT);
+            user.application_end_date = end_date;
         }
+        user.exec_count = user.exec_count + 1;
+        user.save();
+
+        function generate_response(state) {
+            var result = {
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                "id": user._id,
+                "subscription_state": state,
+                "exec_count": user.exec_count,
+                "expire_time": Math.floor(user.application_end_date.getTime() / 1000)
+            };
+            return result;
+        }
+
+        if (!user.subscription) {
+            return callback(null, generate_response(UNSUBSCRIBED_USER));
+        }
+
+        var subscription = JSON.parse(user.subscription);
+        fastSpring.checkSubscriptionState('active', subscription.subscriptionId)
+            .then(function (isSubscribed) {
+                if (isSubscribed) {
+                    return callback(null, generate_response(SUBSCRIBED_USER));
+                }
+                return callback(null, generate_response(UNSUBSCRIBED_USER));
+            }).catch(function (error) {
+            return callback(error, null);
+        });
     });
 }
 
