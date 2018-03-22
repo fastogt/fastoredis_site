@@ -1,2 +1,10 @@
-User-agent: *
-Allow: /
+User-Agent: *
+Disallow: /login
+Disallow: /signup
+
+User-Agent: Yandex
+Disallow: /login
+Disallow: /signup
+
+Host: https://fastoredis.com
+Sitemap: https://fastoredis.com/sitemap.xml
