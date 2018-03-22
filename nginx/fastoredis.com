@@ -1,21 +1,39 @@
-upstream app_fastonosql {
+upstream app_fastoredis {
     server 127.0.0.1:8080;
 }
 
 server {
-    # Redirect non-https traffic to https
-    if ($scheme != "https") {
-         return 301 https://$host$request_uri;
-    } # managed by Certbot
+    listen 80;
+    server_name fastoredis.com;
+    access_log /var/log/nginx/fastoredis.log;
+    return 301 https://$server_name$request_uri;
 }
 
 server {
-    server_name www.fastonosql.com fastonosql.com;
-    access_log /var/log/nginx/fastonosql.log;
+    listen 443 ssl;
+    server_name www.fastoredis.com;
+    return 301 https://fastoredis.com$request_uri;
+
+    ssl_certificate /etc/letsencrypt/live/fastoredis.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/fastoredis.com/privkey.pem; # managed by Certbot
+
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_ecdh_curve secp384r1;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+}
+
+server {
+    server_name fastoredis.com;
+    access_log /var/log/nginx/fastoredis.log;
 
     listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/fastonosql.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/fastonosql.com/privkey.pem; # managed by Certbot    
+    ssl_certificate /etc/letsencrypt/live/fastoredis.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/fastoredis.com/privkey.pem; # managed by Certbot    
 
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
@@ -42,7 +60,7 @@ server {
       proxy_set_header Host $http_host;
       proxy_set_header X-NginX-Proxy true;
 
-      proxy_pass http://app_fastonosql;
+      proxy_pass http://app_fastoredis;
       proxy_redirect off;
     }
 }
