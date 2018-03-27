@@ -3,7 +3,7 @@ module.exports = {
     project: {
         name: 'FastoRedis',
         name_lowercase: 'fastoredis',
-        version: '1.15.7',
+        version: '1.16.0',
         domain: 'fastoredis.com'
     },
 
@@ -24,8 +24,6 @@ module.exports = {
         twitter_link: 'https://twitter.com/FastoRedis',
 
         google_analitics_token: 'UA-56403848-1'
-        //data_ad_client: 'ca-pub-4299795201353238',
-        //data_ad_slot: '1261996191'
     },
 
     support: {

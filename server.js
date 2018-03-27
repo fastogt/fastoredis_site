@@ -143,7 +143,7 @@ listener.on('connection', function (socket) {
             }); //
 
             var rpc = new (require('./app/modules/amqprpc'))(rabbit_connection);
-            var branding_variables = '-DIS_PUBLIC_BUILD=OFF -DUSER_LOGIN=' + in_json.email + ' -DUSER_FIRST_NAME=' + in_json.first_name + ' -DUSER_LAST_NAME=' + in_json.last_name;
+            var branding_variables = '-DIS_PUBLIC_BUILD=OFF -DUSER_LOGIN=' + in_json.email;
             var request_data_json = {
                 'branding_variables': branding_variables,
                 'package_type': in_json.package_type,
@@ -314,7 +314,6 @@ function statistic(args, opt, callback) {
         user.save(function (err) {
             if (err) {
                 console.error('failed to save statistic request: ', err);
-                return;
             }
         });
     });
