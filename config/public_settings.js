@@ -3,7 +3,7 @@ module.exports = {
     project: {
         name: 'FastoRedis',
         name_lowercase: 'fastoredis',
-        version: '1.16.0',
+        version: '1.16.1',
         domain: 'fastoredis.com'
     },
 
