@@ -191,27 +191,14 @@ module.exports = function (app, passport, nev) {
         var user = req.user;
 
         if (user.email_subscription) {
-            mailerLite.updateSubscriber(user.email, { // un subscribed
-                type: 'unsubscribed'
-            }).then(function () {
-                user.remove(function (err) {
-                    if (!err) {
-                        res.redirect('/logout');
-                        return;
-                    }
-                    res.redirect('/profile');
-                })
-            }).catch(function (err) {
-                res.redirect('/profile');
-            });
+            mailerLite.removeSubscriberFromGroup(app.locals.mailer_lite_config.group, user.email)
+                .then(function () {
+                    removeUser(user, res);
+                }).catch(function (err) {
+                   removeUser(user, res);
+                });
         } else {
-            user.remove(function (err) {
-                if (!err) {
-                    res.redirect('/logout');
-                    return;
-                }
-                res.redirect('/profile');
-            })
+            removeUser(user, res);
         }
     });
 
@@ -376,4 +363,15 @@ function isSubscribed(req, res, next) {
     }
 
     res.redirect('/profile');
+}
+
+// Note: remove user
+function removeUser (user, res) {
+    user.remove(function (err) {
+        if (!err) {
+            res.redirect('/logout');
+        } else {
+            res.redirect('/profile');
+        }
+    })
 }
