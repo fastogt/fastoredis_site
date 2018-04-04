@@ -37,7 +37,7 @@
 
         function download(os, platform, package_extension) {
             ga('send', 'event', 'Download', 'Anonim user download for ' + os, 'Download Page');
-            location.href = '/trial_users_downloads/' + os + '/<%= project.name_lowercase %>-<%= project.version %>-' + platform + package_extension;
+            location.href = '/downloads/' + os + '/<%= project.name_lowercase %>-<%= project.version %>-' + platform + package_extension;
             // location.href = '/login';
         }
     </script>
@@ -260,7 +260,12 @@
                 </div>
                 <div class="widget column three">
                     <h4>E-mail:</h4>
-                    <p><a href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a><br/>
+                    <a href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a>
+                </div>
+                <div class="widget column three">
+                    <a href="/private_policy">Private policy</a>
+                    <br/>
+                    <a href="/term_of_use">Term of use</a>
                 </div>
             </section><!-- top-footer -->
             <section id="bottom-footer">

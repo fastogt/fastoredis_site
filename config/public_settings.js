@@ -9,7 +9,7 @@ module.exports = {
 
     site: {
         name: 'FastoRedis',
-        version: '1.0.0',
+        version: '1.1.0',
         domain: 'https://fastoredis.com',
         keywords: 'fastoredis, gui, manager, redis, client, admin, tool, desktop, cluster, sentinel, streams, mac os x, linux, freebsd, windows, android',
         description: 'FastoRedis - Redis GUI manager.',
