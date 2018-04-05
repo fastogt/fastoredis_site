@@ -153,6 +153,24 @@ module.exports = function (app, passport, nev) {
 
     app.post('/updateProfile', isLoggedIn, function (req, res) {
         var user = req.user;
+        var message = ''
+
+        // Note: manage password.
+        if (req.body.currentPassword) {
+            if (!user.validPassword(req.body.currentPassword)) {
+                message = 'Invalid password!';
+            }
+
+            if (req.body.newPassword && req.body.newPassword !== req.body.repeatPassword) {
+                message = 'The passwords are different!';
+            }
+
+            if (!message) {
+                user.set({
+                    password: user.generateHash(req.body.newPassword)
+                });
+            }
+        }
 
         user.set({
             first_name: req.body.firstName.trim(),
@@ -178,7 +196,10 @@ module.exports = function (app, passport, nev) {
                 });
             }
 
-            res.redirect('/profile');
+            res.render('profile.ejs', {
+                user: req.user,
+                message: message || req.flash('statusProfileMessage')
+            });
         });
     });
 
@@ -190,8 +211,8 @@ module.exports = function (app, passport, nev) {
                 .then(function () {
                     removeUser(user, res);
                 }).catch(function (err) {
-                   removeUser(user, res);
-                });
+                removeUser(user, res);
+            });
         } else {
             removeUser(user, res);
         }
@@ -361,7 +382,7 @@ function isSubscribed(req, res, next) {
 }
 
 // Note: remove user
-function removeUser (user, res) {
+function removeUser(user, res) {
     user.remove(function (err) {
         if (!err) {
             res.redirect('/logout');
