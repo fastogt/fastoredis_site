@@ -7,17 +7,19 @@ var FastSpring = require('./modules/fastspring');
 var MailerLite = require('./modules/mailerlite');
 
 function deleteFolderRecursive(path) {
-    if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach(function (file, index) {
-            var curPath = path + "/" + file;
-            if (fs.lstatSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
+    if (!fs.existsSync(path)) {
+        return;
     }
+
+    fs.readdirSync(path).forEach(function (file, index) {
+        var curPath = path + "/" + file;
+        if (fs.lstatSync(curPath).isDirectory()) { // recurse
+            deleteFolderRecursive(curPath);
+        } else { // delete file
+            fs.unlinkSync(curPath);
+        }
+    });
+    fs.rmdirSync(path);
 }
 
 module.exports = function (app, passport, nev) {
@@ -69,7 +71,19 @@ module.exports = function (app, passport, nev) {
         });
     }
 
-// normal routes ===============================================================
+    // Note: remove user
+    function removeUser(user, res) {
+        deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
+        user.remove(function (err) {
+            if (!err) {
+                res.redirect('/logout');
+            } else {
+                res.redirect('/profile');
+            }
+        })
+    }
+
+    // normal routes ===============================================================
 
     // show the home page (will also have our login links)
     app.get('/', function (req, res) {
@@ -342,6 +356,12 @@ module.exports = function (app, passport, nev) {
 
             var email = user.email;
 
+            // user folder
+            var dir = app.locals.site.users_directory + '/' + user.email;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+
             if (user.email_subscription) {
                 mailerLite.addNewSubscriberToGroup(app.locals.mailer_lite_config.group, {
                     email: email,
@@ -391,15 +411,4 @@ function isSubscribed(req, res, next) {
     }
 
     res.redirect('/profile');
-}
-
-// Note: remove user
-function removeUser(user, res) {
-    user.remove(function (err) {
-        if (!err) {
-            res.redirect('/logout');
-        } else {
-            res.redirect('/profile');
-        }
-    })
 }
