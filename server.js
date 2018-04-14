@@ -96,13 +96,13 @@ app.locals.back_end = {
     socketio_port: settings_config.socketio_port
 };
 
-// fast spring
+// fastspring
 app.locals.fastspring_config = {
     login: settings_config.fastspring_login,
     password: settings_config.fastspring_password
 };
 
-// mailer lite
+// mailerlite
 app.locals.mailer_lite_config = {
     group: settings_config.mailer_lite_group
 };
@@ -476,6 +476,7 @@ function ban_user(args, opt, callback) {
 }
 
 
+// handlers
 json_rpc2_server.expose('version', version);
 json_rpc2_server.expose('statistic', statistic);
 json_rpc2_server.expose('is_subscribed', is_subscribed);
