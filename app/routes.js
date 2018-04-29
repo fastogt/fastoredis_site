@@ -116,7 +116,12 @@ module.exports = function (app, passport, nev) {
             }
 
 
-            var stat = {"exec_count": exec_count, "registered_users": registered_users};
+            var stat = {
+                "exec_count": exec_count,
+                "registered_users": registered_users,
+                "active_users": active_users,
+                "supported_users": supported_users
+            };
             res.render('index.ejs', {statistics: stat});
         });
     });

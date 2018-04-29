@@ -75,8 +75,7 @@
     </div>
 
     <div id="main">
-        <!--content-->
-        <section class="row section text-light first">
+        <section class="row section text-light second">
             <div class="row-content buffer even clear-after">
                 <div class="column fourth">
                     <h4><%- statistics.registered_users %></h4>
@@ -86,19 +85,19 @@
                     <h4><%- statistics.exec_count %></h4>
                     <p>Started application</p>
                 </div>
-
                 <div class="column fourth">
-                    <!-- Place this tag where you want the button to render. -->
-                    <a class="github-button" href="<%- site.github_link %>/subscription"
-                       data-icon="octicon-eye" data-show-count="true"
-                       aria-label="Watch <%- site.github_link_without_host %> on GitHub">Watch</a>
-                    <!-- Place this tag where you want the button to render. -->
-                    <a class="github-button" href="<%- site.github_link %>" data-icon="octicon-star"
-                       data-show-count="true"
-                       aria-label="Star <%- site.github_link_without_host %> on GitHub">Star</a>
+                    <h4><%- statistics.active_users %></h4>
+                    <p>Active users</p>
+                </div>
+                <div class="column fourth">
+                    <h4><%- statistics.supported_users %></h4>
+                    <p>Subscribed users</p>
                 </div>
             </div>
-            
+        </section>
+
+        <!--content-->
+        <section class="row section text-light first">
             <div class="row-content buffer even clear-after">
                 <div class="column six">
                     <h2>What is <%- site.title %>?</h2>
