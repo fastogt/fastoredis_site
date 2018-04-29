@@ -77,16 +77,17 @@
     <div id="main">
         <section class="row section call-to-action first">
             <div class="row">
-                <div class="col-sm-4">
-                    <div class="stat-num"><span ng-bind="displayNumber" end="<%- statistics.registered_users %>"
-                                                class="ng-binding ng-scope"><%- statistics.registered_users %></span>%
-                    </div>
-                    <p>Registered users</p></div>
-                <div class="col-sm-4">
-                    <div class="stat-num"><span ng-bind="displayNumber" end="<%- statistics.exec_count %>"
-                                                class="ng-binding ng-scope"><%- statistics.exec_count %></span>
-                    </div>
-                    <p>Started application</p></div>
+                <div class="col-sm-3 counter-box wow fadeInDown animated" data-wow-delay="0.5s"
+                     style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;">
+                    <h4 data-from="0"
+                        data-to="<%- statistics.registered_users %>"><%- statistics.registered_users %></h4>
+                    <p>Registered users</p>
+                </div>
+                <div class="col-sm-3 counter-box wow fadeInDown animated" data-wow-delay="0.5s"
+                     style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInDown;">
+                    <h4 data-from="0" data-to="<%- statistics.exec_count %>"><%- statistics.exec_count %></h4>
+                    <p>Started application</p>
+                </div>
             </div>
             <div class="row-content" style="line-height: 0.8;">
                 <div class="github">
