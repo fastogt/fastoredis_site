@@ -5,7 +5,7 @@ module.exports = {
         name_lowercase: 'fastoredis',
         version: '1.16.4',
         domain: 'fastoredis.com',
-        trial_days: 3
+        trial_days: 1
     },
 
     site: {
