@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var userBackupSchema = mongoose.Schema({
+var usersBackupSchema = mongoose.Schema({
     email: String,
     first_name: String,
     last_name: String,
@@ -9,4 +9,4 @@ var userBackupSchema = mongoose.Schema({
 });
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('UserBackups', userBackupSchema);
+module.exports = mongoose.model('UsersBackup', usersBackupSchema);
