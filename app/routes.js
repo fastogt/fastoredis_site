@@ -168,7 +168,7 @@ module.exports = function (app, passport, nev) {
         });
     });
 
-// CLEAR user packages
+    // CLEAR user packages
     app.post('/clear_packages', User.checkSubscriptionStatus(app, 'active'), function (req, res) {
         var user = req.user;
         deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
@@ -178,7 +178,7 @@ module.exports = function (app, passport, nev) {
         });
     });
 
-// PROFILE SECTION =========================
+    // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function (req, res) {
         var user = req.user;
 
@@ -284,7 +284,7 @@ module.exports = function (app, passport, nev) {
         }
     });
 
-// SUBSCRIPTION =============================
+    // SUBSCRIPTION =============================
     app.post('/subscription', isLoggedIn, function (req, res) {
         var user = req.user;
         if (user.enableSubscription()) {
@@ -327,7 +327,7 @@ module.exports = function (app, passport, nev) {
         }
     });
 
-// CANCEL_SUBSCRIPTION ==============================
+    // CANCEL_SUBSCRIPTION ==============================
     app.post('/cancel_subscription', User.checkSubscriptionStatus(app, 'active'), function (req, res) {
         var user = req.user;
         var subscr = user.getSubscription();
@@ -344,7 +344,7 @@ module.exports = function (app, passport, nev) {
         });
     });
 
-// LOGOUT ==============================
+    // LOGOUT ==============================
     app.get('/logout', function (req, res) {
         req.logout();
         res.redirect('/');
@@ -354,27 +354,27 @@ module.exports = function (app, passport, nev) {
 // AUTHENTICATE (FIRST LOGIN) ==================================================
 // =============================================================================
 
-// locally --------------------------------
-// LOGIN ===============================
-// show the login form
+    // locally --------------------------------
+    // LOGIN ===============================
+    // show the login form
     app.get('/login', function (req, res) {
         res.render('login.ejs');
     });
 
-// process the login form
+    // process the login form
     app.post('/login', passport.authenticate('local-login', {
         successRedirect: '/profile', // redirect to the secure profile section
         failureRedirect: '/login', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
 
-// SIGNUP =================================
-// show the signup form
+    // SIGNUP =================================
+    // show the signup form
     app.get('/signup', function (req, res) {
         res.render('signup.ejs');
     });
 
-// process the signup form
+    // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/profile', // redirect to the secure profile section
         failureRedirect: '/signup', // redirect back to the signup page if there is an error
@@ -382,7 +382,7 @@ module.exports = function (app, passport, nev) {
     }));
 
 
-// user accesses the link that is sent
+    // user accesses the link that is sent
     app.get('/email-verification/:URL', function (req, res) {
         var url = req.params.URL;
         nev.confirmTempUser(url, function (err, user) {
@@ -424,7 +424,7 @@ module.exports = function (app, passport, nev) {
         res.render('after_confirm.ejs');
     });
 
-// seo 404
+    // seo 404
     app.get('/custom_404', function (req, res) {
         res.status(404).render('custom_404.ejs');
     });
@@ -432,8 +432,7 @@ module.exports = function (app, passport, nev) {
     app.get('*', function (req, res) {
         res.redirect('/custom_404');
     });
-}
-;
+};
 
 // route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
