@@ -102,7 +102,12 @@ module.exports = function (nev, passport) {
             }
             new_user.email_subscription = email_subscription;
 
-            UserBackups.findOneAndUpdate({'email': email}, new_user, {upsert: true}, function (err, doc) {
+            var new_backup_user = new UserBackups();
+            new_backup_user.email = new_user.email;
+            new_backup_user.first_name = new_user.first_name;
+            new_backup_user.last_name = new_user.last_name;
+            new_backup_user.email_subscription = new_user.email_subscription;
+            UserBackups.findOneAndUpdate({'email': email}, new_backup_user, {upsert: true}, function (err, doc) {
                 if (err) {
                     console.error(err);
                 }
