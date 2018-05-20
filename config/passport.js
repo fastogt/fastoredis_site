@@ -102,7 +102,7 @@ module.exports = function (nev, passport) {
             }
             new_user.email_subscription = email_subscription;
 
-            var new_backup_user = new UserBackups();
+            var new_backup_user = new UsersBackup();
             new_backup_user.email = new_user.email;
             new_backup_user.first_name = new_user.first_name;
             new_backup_user.last_name = new_user.last_name;
