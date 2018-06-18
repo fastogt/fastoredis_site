@@ -2,18 +2,24 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var FastSpring = require('./../modules/fastspring');
-var user_constants = require('./user_constants');
 var StatisticSchema = require('./statistic');
 
-var UserType = {
+
+const UserType = Object.freeze({
     USER: 'USER',
     SUPPORT: 'SUPPORT',
     OPEN_SOURCE: 'OPEN_SOURCE',
     ENTERPRISE: 'ENTERPRISE'
-};
+});
+
+const ApplicationState = Object.freeze({
+    ACTIVE: 'ACTIVE',
+    BANNED: 'BANNED',
+    TRIAL_FINISHED: 'TRIAL_FINISHED'
+});
 
 // define the schema for our user model
-var userSchema = mongoose.Schema({
+var UserSchema = mongoose.Schema({
     email: String,
     password: String,
     first_name: String,
@@ -29,7 +35,7 @@ var userSchema = mongoose.Schema({
     },
     type: {
         type: String,
-        enum: [UserType.USER, UserType.SUPPORT, UserType.OPEN_SOURCE, UserType.ENTERPRISE],
+        enum: Object.values(UserType),
         default: UserType.USER
     },
     email_subscription: Boolean,
@@ -39,49 +45,67 @@ var userSchema = mongoose.Schema({
     statistic: {type: [StatisticSchema], default: []},
     application_state: {
         type: String,
-        enum: [user_constants.ACTIVE, user_constants.BANNED, user_constants.TRIAL_FINISHED],
-        default: user_constants.ACTIVE
+        enum: Object.values(ApplicationState),
+        default: ApplicationState.ACTIVE
     }
 });
 
+Object.assign(UserSchema.statics, {
+    UserType, ApplicationState
+});
+
 // checking if password is valid
-userSchema.methods.isActive = function () {
+UserSchema.methods.isActive = function () {
     return this.application_state === user_constants.ACTIVE;
 };
 
+// FIX ME
+UserSchema.methods.getType = function () {
+    if (this.type === UserType.USER) {
+        return 0;
+    } else if (this.type === UserType.SUPPORT) {
+        return 1;
+    } else if (this.type === UserType.OPEN_SOURCE) {
+        return 2;
+    } else if (this.type === UserType.ENTERPRISE) {
+        return 3;
+    }
+    return 0;
+};
+
 // generating a hash
-userSchema.methods.generateHash = function (password) {
+UserSchema.methods.generateHash = function (password) {
     var hash = crypto.createHash('md5').update(password).digest('hex');
     return hash;
 };
 
 // checking if hexed password is valid
-userSchema.methods.validHexedPassword = function (hexed_password) {
+UserSchema.methods.validHexedPassword = function (hexed_password) {
     return hexed_password === this.password;
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function (password) {
+UserSchema.methods.validPassword = function (password) {
     var hash = crypto.createHash('md5').update(password).digest('hex');
     return this.validHexedPassword(hash);
 };
 
 // enable subscription
-userSchema.methods.enableSubscription = function () {
+UserSchema.methods.enableSubscription = function () {
     return (!this.subscription_state ||
         this.subscription_state === 'canceled' ||
         this.subscription_state === 'deactivated');
 };
 
 // get subscription info
-userSchema.methods.getSubscription = function () {
+UserSchema.methods.getSubscription = function () {
     return this.subscription
         ? JSON.parse(this.subscription)
         : null;
 };
 
 // get subscription state
-userSchema.methods.getSubscriptionState = function () {
+UserSchema.methods.getSubscriptionState = function () {
     return this.subscription_state;
 };
 
@@ -91,7 +115,7 @@ userSchema.methods.getSubscriptionState = function () {
  * @param app {Object} - application object
  * @param state {String} - 'canceled', 'active' & etc.
  */
-userSchema.statics.checkSubscriptionStatus = function (app, state) {
+UserSchema.statics.checkSubscriptionStatus = function (app, state) {
     var fastSpring = new FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
 
     return function (req, res, next) {
@@ -116,4 +140,4 @@ userSchema.statics.checkSubscriptionStatus = function (app, state) {
 };
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', UserSchema);

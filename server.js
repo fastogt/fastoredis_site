@@ -199,7 +199,7 @@ mongoose.connect(config_db.url, {useMongoClient: true}); // connect to our datab
 // NEV configuration =====================
 // our persistent user model
 var User = require('./app/models/user');
-var user_constants = require('./app/models/user_constants');
+const {UserType, ApplicationState} = require('./app/models/user');
 
 nev.configure({
     persistentUserModel: User,
@@ -309,7 +309,6 @@ function statistic(args, opt, callback) {
         exec_count: args.project.exec_count
     };
 
-    var User = mongoose.model("User");
     User.findOne({'email': args.email}, function (err, user) {
         if (err) {
             console.error('failed to find user for statistic: ', err);
@@ -342,7 +341,6 @@ function is_subscribed(args, opt, callback) {
     }
 
     var fastSpring = new FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
-    var User = mongoose.model("User");
     User.findOne({'email': args.email}, function (err, user) {
         // if there are any errors, return the error
         if (err) {
@@ -365,10 +363,10 @@ function is_subscribed(args, opt, callback) {
             user.application_end_date = d;
         }
 
-        if (user.type === 'USER') {
-            if (user.application_state === user_constants.ACTIVE && !user.subscription) {
+        if (user.type === UserType.USER) {
+            if (user.application_state === ApplicationState.ACTIVE && !user.subscription) {
                 if (user.application_end_date < cur_date) {
-                    user.application_state = user_constants.TRIAL_FINISHED;
+                    user.application_state = ApplicationState.TRIAL_FINISHED;
                     var transporter = nodemailer.createTransport(transport_options);
                     const mailOptions = {
                         from: app.locals.site.title + ' Support<' + app.locals.site.support_email + '>',
@@ -396,23 +394,25 @@ function is_subscribed(args, opt, callback) {
         });
 
         function generate_response(state) {
+            var type = user.getType();
             var result = {
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 "id": user._id,
                 "subscription_state": state,
+                "type": type,
                 "exec_count": user.exec_count,
                 "expire_time": Math.floor(user.application_end_date.getTime() / 1000)
             };
             return result;
         }
 
-        if (user.type === 'SUPPORT' || user.type === 'OPEN_SOURCE') {
+        if (user.type === UserType.SUPPORT || user.type === UserType.OPEN_SOURCE) {
             return callback(null, generate_response(SUBSCRIBED_USER));
         }
 
         if (!user.subscription) {
-            if (user.application_state === user_constants.BANNED) { // if banned
+            if (user.application_state === ApplicationState.BANNED) { // if banned
                 return callback('User(' + user.email + ') banned, please write to ' + app.locals.support.contact_email + ' to unban, or subscribe', null);
             }
 
@@ -426,7 +426,7 @@ function is_subscribed(args, opt, callback) {
                     return callback(null, generate_response(SUBSCRIBED_USER));
                 }
 
-                if (user.application_state === user_constants.BANNED) {  // if banned
+                if (user.application_state === ApplicationState.BANNED) {  // if banned
                     return callback('User(' + user.email + ') banned, please write to ' + app.locals.support.contact_email + ' to unban, or subscribe', null);
                 }
                 return callback(null, generate_response(UNSUBSCRIBED_USER));
@@ -443,7 +443,6 @@ function ban_user(args, opt, callback) {
     }
 
     console.log("ban_user:", args);
-    var User = mongoose.model("User");
     User.findOne({'email': args.email}, function (err, user) {
         // if there are any errors, return the error
         if (err) {
@@ -453,11 +452,11 @@ function ban_user(args, opt, callback) {
 
         // if no user is found, return the message
         if (!user) {
-            console.error('User not found');
+            //console.error('User not found');
             return;
         }
 
-        user.application_state = user_constants.BANNED;
+        user.application_state = ApplicationState.BANNED;
         user.save(function (err) {
             if (err) {
                 console.error('Failed to save user application state: ', err);
@@ -474,11 +473,11 @@ function ban_user(args, opt, callback) {
 
         // if no user is found, return the message
         if (!user) {
-            console.error('User not found');
+            // console.error('User not found');
             return;
         }
 
-        user.application_state = user_constants.BANNED;
+        user.application_state = ApplicationState.BANNED;
         user.save(function (err) {
             if (err) {
                 console.error('Failed to save user application state: ', err);
