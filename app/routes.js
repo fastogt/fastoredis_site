@@ -392,10 +392,10 @@ module.exports = function (app, passport, nev) {
     app.get('/email-verification/:URL', function (req, res) {
         var url = req.params.URL;
         nev.confirmTempUser(url, function (err, user) {
-            /*if (err) {
+            if (err) {
                 console.error(err);
                 return res.status(404).send('ERROR: sending confirmation email FAILED');
-            }*/
+            }
 
             if (!user) {
                 return res.status(404).send('ERROR: confirming temp user FAILED');
