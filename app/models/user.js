@@ -35,17 +35,17 @@ var UserSchema = mongoose.Schema({
     },
     type: {
         type: String,
-        enum: [UserType.USER, UserType.SUPPORT, UserType.OPEN_SOURCE, UserType.ENTERPRISE],
+        enum: Object.values(UserType),
         default: UserType.USER
     },
-    email_subscription: Boolean,
+    email_subscription: {type: Boolean, default: true},
     exec_count: {type: Number, default: 0},
     application_end_date: {type: Date, default: Date.now},
     application_last_start_date: {type: Date, default: Date.now},
     statistic: {type: [StatisticSchema], default: []},
     application_state: {
         type: String,
-        enum: [ApplicationState.ACTIVE, ApplicationState.BANNED, ApplicationState.TRIAL_FINISHED],
+        enum: Object.values(ApplicationState),
         default: ApplicationState.ACTIVE
     }
 });
