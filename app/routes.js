@@ -13,7 +13,12 @@ var stat = {
     "registered_users": 0,
     "active_users": 0,
     "banned_users": 0,
-    "supported_users": 0
+    "supported_users": 0,
+    "statistics": {
+        "data": [1, 1, 1],
+        "labels": ["\"Windows NT\"", "\"Mac OS X\"", "\"Linux\""],
+        "colors": ["\"Red\"", "\"Green\"", "\"Blue\""]
+    }
 };
 
 scheduler.scheduleJob('0 * * * *', function () {
@@ -24,12 +29,14 @@ scheduler.scheduleJob('0 * * * *', function () {
         var registered_users = 0;
         var trial_finished = 0;
         var supported_users = 0;
+        var statistics = {"data": [], "labels": [], "colors": []};
+        var local_statistics = {};
+        var colors = ['Red', 'Green', 'Blue', 'Brown', 'Orange', 'Yellow', 'Gray'];
 
         if (err) {
             console.error("Statistic error: ", err);
         } else {
             users.forEach(function (user) {
-                exec_count += user.exec_count;
                 var app_state = user.application_state;
                 if (app_state === ApplicationState.ACTIVE) {
                     active_users += 1;
@@ -43,16 +50,34 @@ scheduler.scheduleJob('0 * * * *', function () {
                     supported_users += 1;
                 }
                 registered_users += 1;
+
+                // statistics
+                for (var i = 0; i < user.statistic.length; ++i) {
+                    var stat = user.statistic[i];
+                    if (!local_statistics.hasOwnProperty(stat.os.name)) {
+                        local_statistics[stat.os.name] = 0;
+                    }
+                    local_statistics[stat.os.name] += 1;
+                    exec_count += 1;
+                }
             });
         }
 
+
+        for (var key in local_statistics) {
+            var value = local_statistics[key];
+            statistics.data.push(value);
+            statistics.labels.push('"' + key + '"');
+            statistics.colors.push('"' + colors[statistics.data.length - 1] + '"');
+        }
 
         stat = {
             "exec_count": exec_count,
             "registered_users": registered_users,
             "active_users": active_users,
             "banned_users": banned_users,
-            "supported_users": supported_users
+            "supported_users": supported_users,
+            "statistics": statistics
         };
     });
 });
