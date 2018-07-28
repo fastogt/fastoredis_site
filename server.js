@@ -378,7 +378,7 @@ function is_subscribed(args, opt, callback) {
                     };
                     transporter.sendMail(mailOptions, function (err, info) {
                         if (err) {
-                            console.log(err);
+                            console.error(err);
                         } else {
                             console.log('trial message sent to:', user.email);
                         }
