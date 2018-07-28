@@ -79,7 +79,9 @@ app.locals.project = {
     version: public_settings_config.project.version,
     port: settings_config.app_port,
     domain: public_settings_config.project.domain,
-    trial_days: public_settings_config.project.trial_days
+    trial_days: public_settings_config.project.trial_days,
+    price_per_month: public_settings_config.project.price_per_month,
+    price_per_year: public_settings_config.project.price_per_year
 };
 app.locals.support = {
     name: public_settings_config.support.name,
