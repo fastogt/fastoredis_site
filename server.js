@@ -156,7 +156,8 @@ listener.on('connection', function (socket) {
             }); //
 
             var rpc = new (require('./app/modules/amqprpc'))(rabbit_connection);
-            var branding_variables = '-DIS_PUBLIC_BUILD=OFF -DUSER_LOGIN=' + in_json.email;
+            // in_json.strategy
+            var branding_variables = '-DBUILD_STRATEGY:STRING=public -DUSER_LOGIN:STRING=' + in_json.email; // + '-DUSER_PASSWORD:STRING=' + in_json.email;
             var request_data_json = {
                 'branding_variables': branding_variables,
                 'package_type': in_json.package_type,
