@@ -19,7 +19,4 @@ var AnonymousStatisticSchema = mongoose.Schema({
 });
 
 // create the model for statistics and expose it to our app
-module.exports = AnonymousStatisticSchema;
-
-
 module.exports = mongoose.model('AnonymousStatistic', AnonymousStatisticSchema);
