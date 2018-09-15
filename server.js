@@ -352,9 +352,12 @@ function anonymous_statistic(args, opt, callback) {
         arch: args.project.arch
     };
 
-    var new_stat = {create_date: Date(), os: os, project: proj};
-    AnonymousStatistic.push(new_stat);
-    console.log('anonymous_statistic: ', new_stat);
+    var new_stat = new AnonymousStatistic({os: os, project: proj});
+    new_stat.save(function (err) {
+        if (err) {
+            console.error('failed to save anonymous_statistic request: ', err);
+        }
+    });
     callback(null, 'OK');
 }
 
