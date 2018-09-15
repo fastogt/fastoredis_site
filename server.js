@@ -203,6 +203,7 @@ mongoose.connect(config_db.url); // connect to our database
 // our persistent user model
 var User = require('./app/models/user');
 const {UserType, ApplicationState} = require('./app/models/user');
+var AnonymousStatistic = require('./app/models/anonymous_statistic');
 
 nev.configure({
     persistentUserModel: User,
@@ -352,6 +353,7 @@ function anonymous_statistic(args, opt, callback) {
     };
 
     var new_stat = {create_date: Date(), os: os, project: proj};
+    AnonymousStatistic.push(new_stat);
     console.log('anonymous_statistic: ', new_stat);
     callback(null, 'OK');
 }
