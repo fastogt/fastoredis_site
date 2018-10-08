@@ -3,11 +3,11 @@ module.exports = {
     project: {
         name: 'FastoRedis',
         name_lowercase: 'fastoredis',
-        version: '1.18.3',
+        version: '1.19.0',
         domain: 'fastoredis.com',
         trial_days: 30,
-        price_per_month: 3.99,
-        price_per_year: 39.99
+        price_per_month: 4.99,
+        price_per_year: 49.99
     },
 
     site: {
