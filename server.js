@@ -82,7 +82,8 @@ app.locals.project = {
     trial_days: public_settings_config.project.trial_days,
     price_per_month: public_settings_config.project.price_per_month,
     price_per_6_month: public_settings_config.project.price_per_6_month,
-    price_per_year: public_settings_config.project.price_per_year
+    price_per_year: public_settings_config.project.price_per_year,
+    permanent: public_settings_config.project.permanent
 };
 app.locals.support = {
     name: public_settings_config.support.name,
@@ -435,7 +436,7 @@ function is_subscribed(args, opt, callback) {
             };
         }
 
-        if (user.type === UserType.SUPPORT || user.type === UserType.OPEN_SOURCE) {
+        if (user.isPrimary()) {
             return callback(null, generate_response(SUBSCRIBED_USER));
         }
 
