@@ -121,6 +121,14 @@ UserSchema.methods.getSubscriptionState = function () {
     return this.subscription_state;
 };
 
+// can cancel subscription
+UserSchema.methods.canCancelSubscription = function () {
+    if (!this.subscription_state) {
+        return false;
+    }
+    return this.subscription_state === 'active';
+};
+
 
 /**
  * Check subscription status by param
