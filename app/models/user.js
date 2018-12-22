@@ -121,6 +121,7 @@ UserSchema.methods.getSubscriptionState = function () {
     return this.subscription_state;
 };
 
+
 /**
  * Check subscription status by param
  *
