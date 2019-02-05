@@ -158,7 +158,7 @@ listener.on('connection', function (socket) {
 
             var rpc = new (require('./app/modules/amqprpc'))(rabbit_connection);
             // in_json.strategy
-            var branding_variables = '-DPRO_VERSION=ON -DBUILD_STRATEGY:STRING=public -DUSER_LOGIN:STRING=' + in_json.email; // + '-DUSER_PASSWORD:STRING=' + in_json.email;
+            var branding_variables = '-DPRO_VERSION=ON -DBUILD_STRATEGY:STRING=public -DUSER_LOGIN:STRING=' + in_json.email; // + ' -DUSER_PASSWORD:STRING=' + in_json.password;
             var request_data_json = {
                 'branding_variables': branding_variables,
                 'package_type': in_json.package_type,
