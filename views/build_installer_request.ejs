@@ -76,18 +76,21 @@
             update_bar(response_json.progress, response_json.message);
         });
 
-        function send_build_request(email, password, strategy) {
+        function send_build_request(email, password, first_name, last_name) {
             var platform = $('.nav-tabs .active > a').attr('aria-controls');
             var os_ctrl = $('input[name=' + platform + ']:checked');
             var package_type = os_ctrl.attr('package_type');
             var arch = os_ctrl.attr('data-arch');
 
+            var build_strategy = document.getElementById('build_strategy');
             var build_args = {
                 "platform": platform,
                 "package_type": package_type,
                 "email": email,
                 "password": password,
-                "strategy": strategy,
+                "first_name": first_name,
+                "last_name": last_name,
+                "strategy": build_strategy.options[build_strategy.selectedIndex].value,
                 "arch": arch
             };
             var msg = JSON.stringify(build_args);
@@ -231,6 +234,13 @@
                         </div>
                     </div>
                     <div role="tabpane2" class="tab-pane form-inline" id="advanced">
+                        <select id="build_strategy">
+                            <option value="community">Community</option>
+                            <option value="public" selected="selected">Public</option>
+                            <% if (user.isPrimary()) { %>
+                            <option value="private">Private</option>
+                            <% } %>
+                        </select>
                     </div>
                 </div>
 
@@ -267,7 +277,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" id="build_button" class="btn btn-primary"
-                            onclick="send_build_request('<%- user.email %>', '<%- user.password %>', 'public')">
+                            onclick="send_build_request('<%- user.email %>', '<%- user.password %>', '<%- user.first_name %>', '<%- user.last_name %>')">
                         Start build
                     </button>
                 </div>
