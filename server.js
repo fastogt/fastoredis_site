@@ -71,7 +71,8 @@ app.locals.site = {
     support_email_service_port: settings_config.support_email_service_port,
     support_email_service_secure: settings_config.support_email_service_secure,
     support_email: settings_config.support_email,
-    support_email_password: settings_config.support_email_password
+    support_email_password: settings_config.support_email_password,
+    notify_email: settings_config.notify_email
 };
 app.locals.project = {
     name: public_settings_config.project.name,
@@ -402,20 +403,22 @@ function is_subscribed(args, opt, callback) {
             if (user.application_state === ApplicationState.ACTIVE && !user.subscription) {
                 if (user.application_end_date < cur_date) {
                     user.application_state = ApplicationState.TRIAL_FINISHED;
-                    /*var transporter = nodemailer.createTransport(transport_options);
+                    var transporter = nodemailer.createTransport(transport_options);
                     const mailOptions = {
-                        from: app.locals.site.title + ' Support<' + app.locals.site.support_email + '>',
-                        to: user.email,
-                        subject: 'Your ' + app.locals.site.title + ' trial period is finished',
-                        html: '<p>Hello ' + user.first_name + ' your <b>' + app.locals.site.title + '</b> trial period is finished.</br>If you like this application please <a href="' + app.locals.site.domain + '/login"><b>subscribe</b></a> it will help us to grow up.</br>If not, please send your <a href="' + app.locals.site.github_issues_link + '"><b>feedback</b></a> what we can do better to improve our product.</p>'
+                        from: app.locals.site.support_email,
+                        to: app.locals.site.notify_email,
+                        subject: app.locals.site.title + ' trial finished',
+                        html: '<p>' +
+                        'First name: ' + user.first_name + '<br>' +
+                        'Last name: ' + user.last_name + '<br>' +
+                        'Email: ' + user.email +
+                        '</p>'
                     };
                     transporter.sendMail(mailOptions, function (err, info) {
                         if (err) {
                             console.error(err);
-                        } else {
-                            console.log('trial message sent to:', user.email);
                         }
-                    });*/
+                    });
                 }
             }
         }
@@ -491,6 +494,28 @@ function ban_user(args, opt, callback) {
         }
 
         user.application_state = ApplicationState.BANNED;
+        var first_name = user.first_name;
+        var last_name = user.last_name;
+        var email = user.email;
+        var collision_id = args.collision_id;
+
+        var transporter = nodemailer.createTransport(transport_options);
+        const mailOptions = {
+            from: app.locals.site.support_email,
+            to: app.locals.site.notify_email,
+            subject: app.locals.site.title + ' banned user',
+            html: '<p>' +
+            'First name: ' + first_name + '<br>' +
+            'Last name: ' + last_name + '<br>' +
+            'Email: ' + email + '<br>' +
+            'Collision id:' + collision_id +
+            '</p>'
+        };
+        transporter.sendMail(mailOptions, function (err, info) {
+            if (err) {
+                console.error(err);
+            }
+        });
         user.save(function (err) {
             if (err) {
                 console.error('Failed to save user application state: ', err);
