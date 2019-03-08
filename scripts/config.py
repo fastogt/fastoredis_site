@@ -10,7 +10,8 @@ versions = ['1.22.3.0',
             '1.24.1.0',
             '1.24.2.0',
             '1.24.3.0',
-            '2.0.0.0']
+            '2.0.0.0',
+            '2.0.1.0']
 
 welcome_file_name = 'base'
 welcome_file_pro_name = 'base_pro'
