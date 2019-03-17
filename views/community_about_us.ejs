@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title><%- site.title %> - How to use</title>
+    <title>How to Use | <%- site.title %></title>
 
-    <meta charset="UTF-8">
-    <meta name="description" content="<%- site.title %>"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="<%- site.name %> - How to use"/>
     <meta name="keywords" content="<%- site.keywords %>"/>
     <meta name="copyright" content="<%- company.domain %>"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <style type="text/css">@-ms-viewport {
             width: device-width;
@@ -35,7 +35,8 @@
     </script>
 </head>
 
-<body class="page">
+<body>
+
 <header role="banner" class="transparent light">
     <div class="row">
         <div class="nav-inner row-content buffer-left buffer-right even clear-after">
@@ -60,27 +61,43 @@
     </div><!-- row -->
 </header>
 
-<div id="intro-wrap" data-height="15.222">
-    <div id="intro">
-        <div class="intro-item">
-            <div class="caption" style="top: 25.5px;">
-                <h1 style="color: #fff;">404 Error</h1>
-            </div><!-- caption -->
-        </div><!-- intro -->
-    </div><!-- intro -->
-</div><!-- intro-wrap -->
-
-<div id="main" class="row">
-    <div class="row-content buffer-left buffer-right buffer-bottom clear-after">
-        <div class="container">
-            <div class="well">
-                <p><b>Oh no! We couldn't find the page you were looking for.</b></p>
-                <a href="/" class="btn btn-warning"><span class="fa fa-sign-in"></span> Home</a>
+<main role="main">
+    <div id="intro-wrap">
+        <div class="container intro-item">
+            <div class="intro-mockup-wrapper">
+                <div class="text-center">
+                    <h1 style="color: #fff;">How to use <%- site.title %></h1>
+                </div>
             </div>
         </div>
-    </div><!-- row-content -->
-</div><!-- row -->
+    </div>
 
+    <div id="main" class="row">
+        <section class="row section text-light first">
+            <div class="row-content buffer-left buffer-right buffer-bottom clear-after">
+                <div class="post-area clear-after">
+                    <article role="main" class="column nine">
+                        <div class="row-content" id="2">
+                            <div>
+                                <a href="https://github.com/fastogt/fastonosql/issues/63">Show Skype content</a>
+                            </div>
+                            <div>
+                                <a href="https://ripitapart.com/2018/05/03/recovering-cookie-clicker-saves-from-an-offline-installation-backup-of-google-chrome/">Recovering
+                                    Cookie Clicker saves from an offline installation/backup of Google Chrome</a>
+                            </div>
+                            <div>
+                                <a href="http://vojtastavik.com/2018/09/02/what-is-inside-derived-data-xcode/">What's
+                                    inside
+                                    the
+                                    Derived Data folder?</a>
+                            </div>
+                        </div>
+                    </article>
+                </div><!-- post-area -->
+            </div><!-- row-content -->
+        </section>
+    </div><!-- row -->
+</main>
 
 <footer role="contentinfo">
     <div class="row">
@@ -98,24 +115,40 @@
                     <table>
                         <tr>
                             <td>
-                                <a href="http://redis.io" target="_blank" class="box" style="display:block;width:70px">Redis</a>
+                                <a href="http://redis.io" target="_blank" class="box" style="display:block;width:80px">Redis</a>
                                 <a href="http://qt-project.org" target="_blank" class="box"
-                                   style="display:block;width:70px">Qt</a>
+                                   style="display:block;width:80px">Qt</a>
                                 <a href="https://www.openssl.org" target="_blank" class="box"
-                                   style="display:block;width:70px">OpenSSL</a>
+                                   style="display:block;width:80px">OpenSSL</a>
+                                <a href="http://memcached.org" target="_blank" class="box"
+                                   style="display:block;width:80px">Memcached</a>
+                                <a href="http://unqlite.org" target="_blank" class="box"
+                                   style="display:block;width:80px">UnQLite</a>
+                                <a href="http://leveldb.org" target="_blank" class="box"
+                                   style="display:block;width:80px">LevelDB</a>
+                                <a href="https://github.com/Qihoo360/pika" target="_blank" class="box"
+                                   style="display:block;width:80px">Pika</a>
                                 <a href="https://github.com/google/snappy" target="_blank" class="box"
-                                   style="display:block;width:70px">Snappy</a>
+                                   style="display:block;width:80px">Snappy</a>
                             </td>
                             <td>
                                 <a href="http://www.libssh2.org" target="_blank" class="box"
-                                   style="display:block;width:70px">LibSSH2</a>
+                                   style="display:block;width:80px">LibSSH2</a>
+                                <a href="http://www.ssdb.io" target="_blank" class="box"
+                                   style="display:block;width:80px">SSDB</a>
                                 <a href="http://www.riverbankcomputing.com/software/qscintilla/intro" target="_blank"
                                    class="box"
-                                   style="display:block;width:70px">QScintilla</a>
-                                <a href="https://cyrusimap.org" target="_blank" class="box"
-                                   style="display:block;width:70px">Sasl</a>
+                                   style="display:block;width:80px">QScintilla</a>
+                                <a href="https://github.com/Netflix/dynomite" target="_blank" class="box"
+                                   style="display:block;width:80px">Dynomite</a>
+                                <a href="http://symas.com/mdb" target="_blank" class="box"
+                                   style="display:block;width:80px">LMDB</a>
                                 <a href="http://www.boost.org" target="_blank" class="box"
-                                   style="display:block;width:70px">Boost</a>
+                                   style="display:block;width:80px">Boost</a>
+                                <a href="http://rocksdb.org" target="_blank" class="box"
+                                   style="display:block;width:80px">RocksDB</a>
+                                <a href="http://forestdb.org" target="_blank" class="box"
+                                   style="display:block;width:80px">ForestDB</a>
                             </td>
                         </tr>
                     </table>
@@ -131,11 +164,11 @@
                 <p class="keep-left"><%- company.copyright %></p>
             </section><!-- bottom-footer -->
             <p> Website development &ndash; <a href="<%- company.domain %>" target="_blank" rel="nofollow"><img
-                            style="display: inline; margin: 0 !important;"
-                            src="/design/img/fastogt.png"
+                            style="display: inline; margin: 0 !important;" src="design/img/fastogt.png"
                             alt="<%- company.description %>" title="<%- company.description %>"/></a></p>
         </div><!-- row-content -->
     </div><!-- row -->
 </footer>
+<script src="/scripts/jivosite.js"></script>
 </body>
 </html>
