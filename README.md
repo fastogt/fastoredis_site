@@ -1,2 +1,2 @@
 # fastonosql_site
-Site for fastonosql
+Site for fastoredis
