@@ -1,5 +1,3 @@
-// server.js
-
 function gen_routing_key(platform, arch) {
     return platform + '_' + arch;
 }
@@ -9,15 +7,19 @@ var config_db = require('./config/database.js');
 var public_settings_config = require('./config/public_settings.js');
 var settings_config = require('./config/settings.js');
 
+const http_port = settings_config.http_server_port;
+const app_host = public_settings_config.project.domain; // 'localhost';
+const app_port = settings_config.app_port;
+
 var root_abs_path = __dirname;
 var public_dir_abs_path = root_abs_path + '/public';
 var public_downloads_users_dir_abs_path = public_dir_abs_path + '/users';
 // set up ======================================================================
 // get all the tools we need
 var express = require('express');
+var expressip = require('express-ip');
 var compression = require('compression');
 var app = express();
-var port = settings_config.http_server_port;
 var mongoose = require('mongoose');
 var nev = require('email-verification')(mongoose);
 var passport = require('passport');
@@ -27,13 +29,14 @@ var mkdirp = require('mkdirp');
 var json_rpc2 = require('json-rpc2');
 
 var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var cookie_parser = require('cookie-parser');
+var body_parser = require('body-parser');
 var session = require('express-session');
 var fs = require('fs');
 
 // app_r
-
+/*var http = require('http');
+var server = http.createServer(app);*/
 var https = require('https');
 var server = https.createServer({
     key: fs.readFileSync(settings_config.ssl_key_path),
@@ -64,9 +67,6 @@ app.locals.site = {
     github_issues_link: public_settings_config.site.github_issues_link,
     github_link_without_host: public_settings_config.site.github_link_without_host,
 
-    twitter_name: public_settings_config.site.twitter_name,
-    twitter_link: public_settings_config.site.twitter_link,
-
     support_email_service_host: settings_config.support_email_service_host,
     support_email_service_port: settings_config.support_email_service_port,
     support_email_service_secure: settings_config.support_email_service_secure,
@@ -78,13 +78,12 @@ app.locals.project = {
     name: public_settings_config.project.name,
     name_lowercase: public_settings_config.project.name_lowercase,
     version: public_settings_config.project.version,
-    port: settings_config.app_port,
     domain: public_settings_config.project.domain,
     trial_days: public_settings_config.project.trial_days,
     price_per_month: public_settings_config.project.price_per_month,
     price_per_6_month: public_settings_config.project.price_per_6_month,
     price_per_year: public_settings_config.project.price_per_year,
-    permanent: public_settings_config.project.permanent
+    price_permanent: public_settings_config.project.price_permanent
 };
 app.locals.support = {
     name: public_settings_config.support.name,
@@ -197,8 +196,10 @@ listener.on('connection', function (socket) {
 });
 
 // configuration ===============================================================
-mongoose.Promise = global.Promise;
-mongoose.connect(config_db.url); // connect to our database
+mongoose.connect(config_db.url, {
+    useCreateIndex: true,
+    useNewUrlParser: true
+});
 
 // NEV configuration =====================
 // our persistent user model
@@ -257,10 +258,11 @@ require('./config/passport')(nev, passport); // pass passport for configuration
 // set up our express application
 app.use(compression());
 app.use(express.static(public_dir_abs_path));
+app.use(expressip().getIpInfoMiddleware);
 app.use(morgan('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser.json()); // get information from html forms
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookie_parser()); // read cookies (needed for auth)
+app.use(body_parser.json()); // get information from html forms
+app.use(body_parser.urlencoded({extended: true}));
 
 app.set('view engine', 'ejs'); // set up ejs for templating
 
@@ -283,7 +285,7 @@ app.use(function (req, res, next) {
 require('./app/routes.js')(app, passport, nev); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
-app.listen(port);
+app.listen(http_port);
 console.log('Http server ready for requests');
 server.listen(app.locals.back_end.socketio_port);
 
@@ -550,4 +552,4 @@ json_rpc2_server.expose('is_subscribed', is_subscribed);
 json_rpc2_server.expose('ban_user', ban_user);
 
 // listen creates an tcp server on localhost only
-json_rpc2_server.listenRaw(app.locals.project.port, app.locals.project.domain);
+json_rpc2_server.listenRaw(app_port, app_host);

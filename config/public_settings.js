@@ -3,13 +3,13 @@ module.exports = {
     project: {
         name: 'FastoRedis',
         name_lowercase: 'fastoredis',
-        version: '2.1.1',
+        version: '2.2.0',
         domain: 'fastoredis.com',
         trial_days: 30,
         price_per_month: 4.99,
         price_per_6_month: 26.99,
         price_per_year: 49.99,
-        permanent: 249.99
+        price_permanent: 249.99
     },
 
     site: {
@@ -25,14 +25,11 @@ module.exports = {
         github_issues_link: 'https://github.com/fastogt/fastoredis/issues',
         github_link_without_host: 'fastogt/fastoredis',
 
-        twitter_name: 'FastoRedis',
-        twitter_link: 'https://twitter.com/FastoRedis',
-
         google_analitics_token: 'UA-56403848-1'
     },
 
     support: {
-        author: 'Topilski Alexandr',
+        author: 'Alexandr Topilski',
         contact_email: 'support@fastogt.com'
     },
 
@@ -40,7 +37,7 @@ module.exports = {
         name: 'FastoGT',
         description: 'Fasto Great Technology',
         domain: 'http://fastogt.com',
-        copyright: 'Copyright © 2014-2018 FastoGT. All rights reserved.'
+        copyright: 'Copyright © 2014-2019 FastoGT. All rights reserved.'
     }
 };
 
