@@ -24,7 +24,7 @@ var stat = {
 
 scheduler.scheduleJob('0 * * * *', function () {
     var anonim_power = 0;
-    AnonymousStatistic.count({}, function (err, count){
+    AnonymousStatistic.count({}, function (err, count) {
         if (err) {
             return;
         }
@@ -740,6 +740,38 @@ module.exports = function (app, passport, nev) {
         res.render('welcome/welcome_enterprise_callback.ejs');
     });
 
+    app.get('/refresh_subscriptions', isLoggedInAndSupport, function (req, res) {
+        User.find({}, function (err, users) {
+            if (err) {
+                return;
+            }
+
+            users.forEach(function (user) {
+                var subscr = user.getSubscription();
+                if (subscr) {
+                    fastSpring.getSubscription(subscr.subscriptionId)
+                        .then(function (data) {
+                            var subscription = JSON.parse(data);
+                            var old_state = user.subscription_state;
+                            if (old_state !== subscription.state) {
+                                user.subscription_state = subscription.state;
+                                user.save(function (err) {
+                                    if (err) {
+                                        console.error('save user subscription state error: ', err);
+                                    }
+                                });
+                            }
+                            console.log('Subscription checked for: ' + user.email + ', old state: ' + old_state + ', new state: ' + user.subscription_state);
+                        }).catch(function (error) {
+                            console.error('getSubscription: ', error);
+                        }
+                    );
+                }
+            });
+        });
+        res.redirect('/profile');
+    });
+
     function not_found(res) {
         res.status(404).render('custom_404.ejs');
     }
@@ -758,6 +790,20 @@ module.exports = function (app, passport, nev) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
+    }
+
+    res.redirect('/');
+}
+
+function isLoggedInAndSupport(req, res, next) {
+    if (req.isAuthenticated()) {
+        var user = req.user;
+        if (user.type === UserType.SUPPORT) {
+            return next();
+        } else {
+            res.redirect('/profile');
+            return;
+        }
     }
 
     res.redirect('/');
