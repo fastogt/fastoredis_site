@@ -741,19 +741,20 @@ module.exports = function (app, passport, nev) {
     });
 
     app.get('/refresh_subscriptions', isLoggedInAndSupport, function (req, res) {
-        User.find({}, function (err, users) {
+        User.find({"subscription": {"$exists": true, "$ne": ""}}, function (err, users) {
             if (err) {
+                res.status(200).send({error: err});
                 return;
             }
 
+            var emails = [];
             users.forEach(function (user) {
                 var subscr = user.getSubscription();
                 if (subscr) {
                     fastSpring.getSubscription(subscr.subscriptionId)
                         .then(function (data) {
                             var subscription = JSON.parse(data);
-                            var old_state = user.subscription_state;
-                            if (old_state !== subscription.state) {
+                            if (user.subscription_state !== subscription.state) {
                                 user.subscription_state = subscription.state;
                                 user.save(function (err) {
                                     if (err) {
@@ -761,15 +762,39 @@ module.exports = function (app, passport, nev) {
                                     }
                                 });
                             }
-                            console.log('Subscription checked for: ' + user.email + ', old state: ' + old_state + ', new state: ' + user.subscription_state);
                         }).catch(function (error) {
                             console.error('getSubscription: ', error);
                         }
                     );
+                    emails.push(user.email);
                 }
             });
+            res.status(200).send({emails: emails});
         });
-        res.redirect('/profile');
+    });
+
+    app.get('/fix_exec_0', isLoggedInAndSupport, function (req, res) {
+        User.find({"exec_count":0}, function (err, users) {
+            if (err) {
+                res.status(200).send({error: err});
+                return;
+            }
+
+            var emails = [];
+            users.forEach(function (user) {
+                if (user.statistic.length !== 0) {
+                    user.exec_count = user.statistic.length;
+                    user.save(function (err) {
+                        if (err) {
+                            console.error('save user exec_count state error: ', err);
+                        }
+                    });
+                    emails.push(user.email);
+                }
+            });
+
+            res.status(200).send({emails: emails});
+        });
     });
 
     function not_found(res) {
