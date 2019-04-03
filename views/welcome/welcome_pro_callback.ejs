@@ -82,60 +82,38 @@
     <div class="row">
         <div class="row-content buffer clear-after">
             <section id="top-footer">
-                <div class="widget column three"><!-- la class="widget" è forse generata utomaticamente da wp -->
+                <div class="widget column"><!-- la class="widget" è forse generata utomaticamente da wp -->
                     <h4>Contribute</h4>
                     <p>Please submit any issues, bugs and proposals via GitHub Issues:<br/>
                         <a href="<%- site.github_issues_link %>" style="font-weight: bold;"><%- site.title %> in
                             GitHub</a><br/>
                         Thank you for finding time to help us!</p>
                 </div>
-                <div class="widget column three">
+                <div class="widget column">
                     <h4>Credits</h4>
                     <table>
                         <tr>
                             <td>
-                                <a href="http://redis.io" target="_blank" class="box" style="display:block;width:80px">Redis</a>
+                                <a href="http://redis.io" target="_blank" class="box" style="display:block;width:70px">Redis</a>
                                 <a href="http://qt-project.org" target="_blank" class="box"
-                                   style="display:block;width:80px">Qt</a>
+                                   style="display:block;width:70px">Qt</a>
                                 <a href="https://www.openssl.org" target="_blank" class="box"
-                                   style="display:block;width:80px">OpenSSL</a>
-                                <a href="http://memcached.org" target="_blank" class="box"
-                                   style="display:block;width:80px">Memcached</a>
-                                <a href="http://unqlite.org" target="_blank" class="box"
-                                   style="display:block;width:80px">UnQLite</a>
-                                <a href="http://leveldb.org" target="_blank" class="box"
-                                   style="display:block;width:80px">LevelDB</a>
-                                <a href="https://github.com/Qihoo360/pika" target="_blank" class="box"
-                                   style="display:block;width:80px">Pika</a>
-                                <a href="https://github.com/google/snappy" target="_blank" class="box"
-                                   style="display:block;width:80px">Snappy</a>
+                                   style="display:block;width:70px">OpenSSL</a>
                             </td>
                             <td>
                                 <a href="http://www.libssh2.org" target="_blank" class="box"
-                                   style="display:block;width:80px">LibSSH2</a>
-                                <a href="http://www.ssdb.io" target="_blank" class="box"
-                                   style="display:block;width:80px">SSDB</a>
+                                   style="display:block;width:70px">LibSSH2</a>
                                 <a href="http://www.riverbankcomputing.com/software/qscintilla/intro" target="_blank"
                                    class="box"
-                                   style="display:block;width:80px">QScintilla</a>
-                                <a href="https://github.com/Netflix/dynomite" target="_blank" class="box"
-                                   style="display:block;width:80px">Dynomite</a>
-                                <a href="http://symas.com/mdb" target="_blank" class="box"
-                                   style="display:block;width:80px">LMDB</a>
-                                <a href="http://www.boost.org" target="_blank" class="box"
-                                   style="display:block;width:80px">Boost</a>
-                                <a href="http://rocksdb.org" target="_blank" class="box"
-                                   style="display:block;width:80px">RocksDB</a>
-                                <a href="http://forestdb.org" target="_blank" class="box"
-                                   style="display:block;width:80px">ForestDB</a>
+                                   style="display:block;width:70px">QScintilla</a>
                             </td>
                         </tr>
                     </table>
                 </div>
-                <div class="widget column three">
+                <div class="widget column">
                     <h4>E-mail:</h4>
-                    <a href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a>
-                    <a href="/private_policy">Private policy</a>
+                    <a href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a><br/>
+                    <a href="/private_policy">Private policy</a><br/>
                     <a href="/term_of_use">Term of use</a>
                 </div>
             </section><!-- top-footer -->
@@ -143,8 +121,7 @@
                 <p class="keep-left"><%- company.copyright %></p>
             </section><!-- bottom-footer -->
             <p> Website development &ndash; <a href="<%- company.domain %>" target="_blank" rel="nofollow"><img
-                            style="display: inline; margin: 0 !important;"
-                            src="/design/img/fastogt.png"
+                            style="display: inline; margin: 0 !important;" src="design/img/fastogt.png"
                             alt="<%- company.description %>" title="<%- company.description %>"/></a></p>
         </div><!-- row-content -->
     </div><!-- row -->
