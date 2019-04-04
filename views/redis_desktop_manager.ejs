@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Redis Desktop Manager | <%- site.title %></title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="<%- site.name %> - How to use"/>
+    <meta name="keywords" content="<%- site.keywords %>"/>
+    <meta name="copyright" content="<%- company.domain %>"/>
+
+    <style type="text/css">@-ms-viewport {
+            width: device-width;
+        }</style>
+
+    <link rel="stylesheet" href="/design/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/design/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/design/css/layers.min.css" media="screen">
+    <link rel="stylesheet" href="/design/css/style.css" media="screen">
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', '<%- site.google_analitics_token %>', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+
+<body>
+
+<header role="banner" class="transparent light">
+    <div class="row">
+        <div class="nav-inner row-content buffer-left buffer-right even clear-after">
+            <nav>
+                <ul class="reset" role="navigation">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/help">How to use</a></li>
+                    <li><a href="/anonim_users_downloads">Download</a></li>
+                    <li><a href="/pro_users_downloads">Download PRO</a></li>
+                    <li><a href="/community_about_us">Community</a></li>
+                </ul>
+            </nav>
+            <div id="brand">
+                <h2 class="reset"><a href="/"><%- site.title %></a></h2>
+            </div>
+            <div class="login">
+                <a href="/login" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign in</a>
+                <a href="/signup" class="btn btn-warning"><span class="fa fa-sign-in"></span> Sign up</a>
+            </div>
+            <a id="menu-toggle" href="#"><i class="fa fa-bars fa-lg"></i></a>
+        </div><!-- row-content -->
+    </div><!-- row -->
+</header>
+
+<main role="main">
+    <div id="intro-wrap">
+        <div class="container intro-item">
+            <div class="intro-mockup-wrapper">
+                <div class="text-center">
+                    <h1 style="color: #fff;">Redis Desktop Manager</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main" class="row">
+        <section class="row section text-light first">
+            <div class="row-content buffer-left buffer-right buffer-bottom clear-after">
+                <div class="post-area clear-after">
+                    <div class="column six">
+                        <h2><%- site.title %> it is Redis Desktop Manager</h2>
+                        <p>
+                            <%- site.title %> (fork of <a href="https://fastonosql.com">FastoNoSQL</a>) - is a
+                            cross-platform open source Redis management tool.
+                        </p>
+                        <h3>Main platforms:</h3>
+                        <h4>Windows:</h4>
+                        <img src="images/redis/main_windows.png" alt="">
+                        <h4>MacOSX:</h4>
+                        <img src="images/redis/main_macosx.jpg" alt="">
+                        <h4>Linux:</h4>
+                        <img src="images/redis/main_linux.png" alt="">
+                        <h4>FreeBSD:</h4>
+                        <img src="images/redis/main_freebsd.jpg" alt="">
+
+                        <h3>Platforms in development:</h3>
+                        <h4>Android (<a href="https://fastonosql.com">FastoNoSQL</a>):</h4>
+                        <img src="images/common/android/main_window_android.png" alt="">
+
+                        <p>We also have plans for mobile iPhone version and for embedded devices, in any case you can
+                            build application from <a href=https://github.com/fastogt/fastonosql>sources</a>. Now we are
+                            opensource solution and help other OSS projects absolutely free.</p>
+                    </div>
+                </div><!-- post-area -->
+            </div><!-- row-content -->
+        </section>
+
+        <section class="row section text-light second">
+            <div class="row-content buffer even clear-after">
+                <div class="column six">
+                    <h3><%- site.title %> have 2 version:</h3>
+                    <h4>Community free for all:</h4>
+                    <img src="images/redis/autocomplete.png" alt="">
+                    <p>
+                        <b>Community version</b> free for all users, it is good choice for starters and who have only
+                        direct or
+                        ssh visible connections to Redis server. We support this version and have counter with
+                        'COMMUNITY LAUNCHED APPLICATION' where we handle how many times this version was started our
+                        community.
+                    </p>
+                    <h4>PRO for professional uses:</h4>
+                    <img src="images/redis/cluster_workflow.png" alt="">
+                    <p>
+                        <b>PRO version</b> developed specialy for professional/company users. This version have trial
+                        period
+                        for <%= project.trial_days %> day(s), also user should be registered on website, the statistic
+                        of
+                        this version you can find also on main page in the bottom. We recommend this version for users
+                        who have Clusters/Sentinels/Modules or server placed in clouds (Azure, AWS, Redis Enterprise).
+                        Our community users often move to PRO after community version in mostly if you ready to try
+                        complex feature you need to try PRO version.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="row section text-light first">
+            <div class="row-content buffer even clear-after">
+                <div class="column six">
+                    <h3><%- site.title %> social accounts:</h3>
+                    <a href="<%- site.facebook_link %>">Facebook</a>
+                    <a href="<%- site.instagram_link %>">Instagram</a>
+                    <a href="<%- site.github_link %>">GitHub</a>
+                    <a href="<%- site.youtube_link %>">Youtube</a>
+                    <a href="<%- site.tweeter_link %>">Tweeter</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="row section text-light second">
+            <div class="row-content buffer even clear-after">
+                <div class="column six">
+                    <h3><%- site.title %> FAQ:</h3>
+                    <ul>
+                        <li>It is free software?</li>
+                        <span style="color:red">
+                        <li>Community version is free, PRO version paid after trial.</li>
+                        </span>
+                    </ul>
+                    <ul>
+                        <li>Chat on website it is bot?</li>
+                        <span style="color:red">
+                        <li>No, it is our consultant or it is me i'am founder.</li>
+                        </span>
+                    </ul>
+                    <ul>
+                        <li>Do you have enterprise solution?</li>
+                        <span style="color:red">
+                        <li>Yes, we have please send email to: <a
+                                    href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a> </li>
+                        </span>
+                    </ul>
+                    <ul>
+                        <li>Why i banned?</li>
+                        <span style="color:red">
+                        <li> You broked 1 or more of our rules:</li>
+                        <ul>
+                            <li>You are able to start this version on only one device.</li>
+                            <li>You used more than 1 email for PRO version.</li>
+                        </ul>
+                        </span>
+                    </ul>
+                    <ul>
+                        <li>Do you have PRO forever(single pay) version?</li>
+                        <span style="color:red">
+                        <li>Yes, price for 1 license is: <%= project.price_permanent %> USD.</li>
+                        </span>
+                    </ul>
+                    <ul>
+                        <li>Do have partnerships with Redis(RedisLabs)?</li>
+                        <span style="color:red">
+                        <li>No, we independent opensource company.</li>
+                        </span>
+                    </ul>
+                    <ul>
+                        <li>How can i help your organization?</li>
+                        <span style="color:red">
+                        <li>You can send donate also please subscribe on our social channels.</li>
+                        </span>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div><!-- row -->
+</main>
+
+<footer role="contentinfo">
+    <div class="row">
+        <div class="row-content buffer clear-after">
+            <section id="top-footer">
+                <div class="widget column"><!-- la class="widget" è forse generata utomaticamente da wp -->
+                    <h4>Contribute</h4>
+                    <p>Please submit any issues, bugs and proposals via GitHub Issues:<br/>
+                        <a href="<%- site.github_issues_link %>" style="font-weight: bold;"><%- site.title %> in
+                            GitHub</a><br/>
+                        Thank you for finding time to help us!</p>
+                </div>
+                <div class="widget column">
+                    <h4>Credits</h4>
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="http://redis.io" target="_blank" class="box" style="display:block;width:70px">Redis</a>
+                                <a href="http://qt-project.org" target="_blank" class="box"
+                                   style="display:block;width:70px">Qt</a>
+                                <a href="https://www.openssl.org" target="_blank" class="box"
+                                   style="display:block;width:70px">OpenSSL</a>
+                            </td>
+                            <td>
+                                <a href="http://www.libssh2.org" target="_blank" class="box"
+                                   style="display:block;width:70px">LibSSH2</a>
+                                <a href="http://www.riverbankcomputing.com/software/qscintilla/intro" target="_blank"
+                                   class="box"
+                                   style="display:block;width:70px">QScintilla</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="widget column">
+                    <h4>E-mail:</h4>
+                    <a href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a><br/>
+                    <a href="/private_policy">Private policy</a><br/>
+                    <a href="/term_of_use">Term of use</a>
+                </div>
+            </section><!-- top-footer -->
+            <section id="bottom-footer">
+                <p class="keep-left"><%- company.copyright %></p>
+            </section><!-- bottom-footer -->
+            <p> Website development &ndash; <a href="<%- company.domain %>" target="_blank" rel="nofollow"><img
+                            style="display: inline; margin: 0 !important;" src="design/img/fastogt.png"
+                            alt="<%- company.description %>" title="<%- company.description %>"/></a></p>
+        </div><!-- row-content -->
+    </div><!-- row -->
+</footer>
+<script src="/scripts/jivosite.js"></script>
+</body>
+</html>

@@ -66,6 +66,10 @@ app.locals.site = {
     github_link: public_settings_config.site.github_link,
     github_issues_link: public_settings_config.site.github_issues_link,
     github_link_without_host: public_settings_config.site.github_link_without_host,
+    facebook_link: public_settings_config.site.facebook_link,
+    tweeter_link: public_settings_config.site.tweeter_link,
+    instagram_link: public_settings_config.site.instagram_link,
+    youtube_link: public_settings_config.site.youtube_link,
 
     support_email_service_host: settings_config.support_email_service_host,
     support_email_service_port: settings_config.support_email_service_port,

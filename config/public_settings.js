@@ -24,6 +24,10 @@ module.exports = {
         github_link: 'https://github.com/fastogt/fastoredis',
         github_issues_link: 'https://github.com/fastogt/fastoredis/issues',
         github_link_without_host: 'fastogt/fastoredis',
+        facebook_link: 'https://facebook.com/profile.php?id=100004938436506',
+        tweeter_link: 'https://twitter.com/FastoRedis',
+        instagram_link: 'https://www.instagram.com/fastoredis',
+        youtube_link: 'https://www.youtube.com/channel/UCdUnh74gr6-HmKa8S6C3viA',
 
         google_analitics_token: 'UA-56403848-1'
     },

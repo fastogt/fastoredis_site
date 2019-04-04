@@ -204,6 +204,10 @@ module.exports = function (app, passport, nev) {
         res.render('registered_users_downloads.ejs');
     });
 
+    app.get('/redis_desktop_manager', function (req, res) {
+        res.render('redis_desktop_manager.ejs');
+    });
+
     app.get('/build_installer_request', isLoggedIn, function (req, res) {
         var user = req.user;
         walk(app.locals.site.users_directory + '/' + user.email, function (err, results) {
