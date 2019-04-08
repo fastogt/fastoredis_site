@@ -1,9 +1,8 @@
 // load the things we need
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var FastSpring = require('./../modules/fastspring');
+var FastSpring = require('fastspring-fastogt-nodejs');
 var StatisticSchema = require('./statistic');
-
 
 const UserType = Object.freeze({
     USER: 'USER',
@@ -17,6 +16,11 @@ const ApplicationState = Object.freeze({
     ACTIVE: 'ACTIVE',
     BANNED: 'BANNED',
     TRIAL_FINISHED: 'TRIAL_FINISHED'
+});
+
+var SubscriptionSchema = mongoose.Schema({
+    reference: String,
+    subscription_id: String
 });
 
 // define the schema for our user model
