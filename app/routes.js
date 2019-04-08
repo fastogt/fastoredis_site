@@ -226,9 +226,11 @@ module.exports = function (app, passport, nev) {
     app.post('/clear_packages', isLoggedIn, function (req, res) {
         var user = req.user;
         deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
+        var expire_time = user.IsPrimary() ? 0 : user.application_end_date.getTime();
         res.render('build_installer_request.ejs', {
             user: user,
-            builded_packages: []
+            builded_packages: [],
+            expire_time: expire_time
         });
     });
 
@@ -778,7 +780,7 @@ module.exports = function (app, passport, nev) {
     });
 
     app.get('/fix_exec_0', isLoggedInAndSupport, function (req, res) {
-        User.find({"exec_count":0}, function (err, users) {
+        User.find({"exec_count": 0}, function (err, users) {
             if (err) {
                 res.status(200).send({error: err});
                 return;
