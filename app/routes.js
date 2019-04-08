@@ -215,7 +215,7 @@ module.exports = function (app, passport, nev) {
                 console.error(err);
             }
 
-            var expire_time = user.IsPrimary() ? 0 : user.application_end_date.getTime();
+            var expire_time = user.isPrimary() ? 0 : user.application_end_date.getTime();
             res.render('build_installer_request.ejs', {
                 user: user,
                 builded_packages: results,
