@@ -415,7 +415,7 @@ function is_subscribed(args, opt, callback) {
         }
 
         var cur_date = new Date();
-        user.exec_count = user.exec_count + 1;
+        user.exec_count++;
         user.application_last_start_date = cur_date;
 
         user.save(function (err) {
