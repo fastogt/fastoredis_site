@@ -218,7 +218,7 @@ module.exports = function (app, passport, nev) {
 
             var expire_time = 0;
             if (!user.isPrimary()) {
-                expire_time = Math.round(user.application_end_date.getTime() / 1000);  // UTC
+                expire_time = user.getExpireTime();
             }
 
             res.render('build_installer_request.ejs', {
@@ -239,11 +239,6 @@ module.exports = function (app, passport, nev) {
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function (req, res) {
         var user = req.user;
-        if (user.country === '') {
-            var ip_info = req.ipInfo;
-            user.country = ip_info.country;
-        }
-
         var user_dir_path = gen_user_save_folder_path(user);
         walk(user_dir_path, function (err, results) {
             if (err) {

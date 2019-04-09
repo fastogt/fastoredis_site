@@ -390,10 +390,6 @@ function is_subscribed(args, opt, callback) {
             return callback('Wrong password.', null);
         }
 
-        var cur_date = new Date();
-        user.exec_count = user.exec_count + 1;
-        user.application_last_start_date = cur_date;
-
         if (user.type === UserType.USER) {
             if (user.application_state === ApplicationState.ACTIVE && !user.subscription) {
                 if (user.application_end_date < cur_date) {
@@ -418,8 +414,10 @@ function is_subscribed(args, opt, callback) {
             }
         }
 
-        user.exec_count = user.exec_count + 1;
+        var cur_date = new Date();
+        user.exec_count++;
         user.application_last_start_date = cur_date;
+
         user.save(function (err) {
             if (err) {
                 console.error('failed to save user application data: ', err);
@@ -435,7 +433,7 @@ function is_subscribed(args, opt, callback) {
                 "subscription_state": state,
                 "type": type,
                 "exec_count": user.exec_count,
-                "expire_time": Math.floor(user.application_end_date.getTime() / 1000)
+                "expire_time": user.getExpireTime()
             };
         }
 
