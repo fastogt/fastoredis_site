@@ -47,8 +47,6 @@ var listener = io.listen(server);
 
 var nodemailer = require('nodemailer');
 
-var FastSpring = require('./app/modules/fastspring');
-
 // settings
 app.locals.site = {
     title: public_settings_config.site.name,
@@ -160,8 +158,9 @@ listener.on('connection', function (socket) {
             if (in_json.strategy === 'public') {
                 branding_variables += ' -DUSER_LOGIN:STRING=' + in_json.email;
             } else if (in_json.strategy === 'private') {
-                branding_variables += ' -DUSER_LOGIN:STRING=' + in_json.email + ' -DUSER_PASSWORD:STRING=' + in_json.password + ' -DUSER_FIRST_NAME:STRING=' + in_json.first_name + ' -DUSER_LAST_NAME:STRING=' + in_json.last_name + ' -DUSER_EXPIRE_TIME=' + in_json.expire_time;
+                branding_variables += ' -DUSER_LOGIN:STRING=' + in_json.email + ' -DUSER_ID:STRING=' + in_json.id + ' -DUSER_PASSWORD:STRING=' + in_json.password + ' -DUSER_FIRST_NAME:STRING=' + in_json.first_name + ' -DUSER_LAST_NAME:STRING=' + in_json.last_name + ' -DUSER_EXPIRE_TIME=' + in_json.expire_time;
             }
+
             var request_data_json = {
                 'branding_variables': branding_variables,
                 'package_type': in_json.package_type,
@@ -376,7 +375,6 @@ function is_subscribed(args, opt, callback) {
         return;
     }
 
-    var fastSpring = new FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
     User.findOne({'email': args.email}, function (err, user) {
         // if there are any errors, return the error
         if (err) {
@@ -393,11 +391,8 @@ function is_subscribed(args, opt, callback) {
         }
 
         var cur_date = new Date();
-        if (user.exec_count === 0) {
-            var d = new Date();
-            d.setDate(cur_date.getDate() + app.locals.project.trial_days);
-            user.application_end_date = d;
-        }
+        user.exec_count = user.exec_count + 1;
+        user.application_last_start_date = cur_date;
 
         if (user.type === UserType.USER) {
             if (user.application_state === ApplicationState.ACTIVE && !user.subscription) {
@@ -448,27 +443,20 @@ function is_subscribed(args, opt, callback) {
             return callback(null, generate_response(SUBSCRIBED_USER));
         }
 
-        if (!user.subscription) {
-            if (user.application_state === ApplicationState.BANNED) { // if banned
-                return callback('You banned, please write to <a href="mailto:' + app.locals.support.contact_email + '">' + app.locals.support.contact_email + '</a> to unban, or <a href="' + app.locals.site.domain + '/login"><b>subscribe</b></a>.', null);
+        user.getSubscriptionState(app.locals.fastspring_config, function (err, state) {
+            if (err) {
+                console.error(err);
+                return callback('Failed to check subscripton state, please try to login again.', null);
             }
 
+            if (User.isSubscribed(state)) {
+                return callback(null, generate_response(SUBSCRIBED_USER));
+            }
+
+            if (user.application_state === ApplicationState.BANNED) {  // if banned
+                return callback('You banned, please write to <a href="mailto:' + app.locals.support.contact_email + '">' + app.locals.support.contact_email + '</a> to unban, or <a href="' + app.locals.site.domain + '/login"><b>subscribe</b></a>.', null);
+            }
             return callback(null, generate_response(UNSUBSCRIBED_USER));
-        }
-
-        var subscription = JSON.parse(user.subscription);
-        fastSpring.checkSubscriptionState('active', subscription.subscriptionId)
-            .then(function (isSubscribed) {
-                if (isSubscribed) {
-                    return callback(null, generate_response(SUBSCRIBED_USER));
-                }
-
-                if (user.application_state === ApplicationState.BANNED) {  // if banned
-                    return callback('You banned, please write to <a href="mailto:' + app.locals.support.contact_email + '">' + app.locals.support.contact_email + '</a> to unban, or <a href="' + app.locals.site.domain + '/login"><b>subscribe</b></a>.', null);
-                }
-                return callback(null, generate_response(UNSUBSCRIBED_USER));
-            }).catch(function (error) {
-            return callback(error, null);
         });
     });
 }

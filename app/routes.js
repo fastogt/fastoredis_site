@@ -4,7 +4,6 @@ var AnonymousStatistic = require('./models/anonymous_statistic');
 
 var fs = require('fs');
 var path_module = require('path');
-var FastSpring = require('./modules/fastspring');
 var scheduler = require('node-schedule');
 const {UserType, ApplicationState} = require('./models/user');
 // global
@@ -108,7 +107,9 @@ function deleteFolderRecursive(path) {
 }
 
 module.exports = function (app, passport, nev) {
-    var fastSpring = new FastSpring(app.locals.fastspring_config.login, app.locals.fastspring_config.password);
+    function gen_user_save_folder_path(user) {
+        return app.locals.site.users_directory + '/' + user.email;
+    }
 
     function walk(dir, done) {
         if (!fs.existsSync(dir)) {
@@ -157,7 +158,7 @@ module.exports = function (app, passport, nev) {
 
     // Note: remove user
     function removeUser(user, res) {
-        deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
+        deleteFolderRecursive(gen_user_save_folder_path(user.email));
         user.remove(function (err) {
             if (!err) {
                 res.redirect('/logout');
@@ -210,15 +211,19 @@ module.exports = function (app, passport, nev) {
 
     app.get('/build_installer_request', isLoggedIn, function (req, res) {
         var user = req.user;
-        walk(app.locals.site.users_directory + '/' + user.email, function (err, results) {
+        walk(gen_user_save_folder_path(user), function (err, results) {
             if (err) {
                 console.error(err);
             }
 
-            var expire_time = user.isPrimary() ? 0 : user.application_end_date.getTime() / 1000;
+            var expire_time = 0;
+            if (!user.isPrimary()) {
+                expire_time = Math.round(user.application_end_date.getTime() / 1000);  // UTC
+            }
+
             res.render('build_installer_request.ejs', {
                 user: user,
-                builded_packages: results,
+                built_packages: results,
                 expire_time: expire_time
             });
         });
@@ -227,7 +232,7 @@ module.exports = function (app, passport, nev) {
     // CLEAR user packages
     app.post('/clear_packages', isLoggedIn, function (req, res) {
         var user = req.user;
-        deleteFolderRecursive(app.locals.site.users_directory + '/' + user.email);
+        deleteFolderRecursive(gen_user_save_folder_path(user));
         res.redirect('/build_installer_request');
     });
 
@@ -239,48 +244,34 @@ module.exports = function (app, passport, nev) {
             user.country = ip_info.country;
         }
 
-        var user_dir_path = app.locals.site.users_directory + '/' + user.email;
+        var user_dir_path = gen_user_save_folder_path(user);
         walk(user_dir_path, function (err, results) {
             if (err) {
                 console.error(err);
             }
 
-            var subscr = user.getSubscription();
-            if (subscr) {
-                fastSpring.getSubscription(subscr.subscriptionId)
-                    .then(function (data) {
-                        var subscription = JSON.parse(data);
-                        user.subscription_state = subscription.state;
-                        user.last_login_date = new Date();
-                        user.save(function (err) {
-                            if (err) {
-                                console.error('save user subscription state error: ', err);
-                            }
-                        });
+            user.getSubscriptionState(app.locals.fastspring_config, function (err, state) {
+                if (err) {
+                    console.error(err);
+                }
 
-                        res.render('profile.ejs', {
-                            user: user,
-                            packages: results
-                        });
-                    }).catch(function (error) {
-                    console.error('getSubscription: ', error);
-                });
-            } else {
                 user.last_login_date = new Date();
                 user.save(function (err) {
                     if (err) {
-                        console.error('save last_login_date error: ', err);
+                        console.error('save user subscription state error: ', err);
                     }
                 });
+
                 res.render('profile.ejs', {
                     user: user,
-                    packages: results
+                    packages: results,
+                    subscription_state: state
                 });
-            }
+            });
         });
     });
 
-    app.post('/updateProfile', isLoggedIn, function (req, res) {
+    app.post('/update_profile', isLoggedIn, function (req, res) {
         var user = req.user;
 
         // Note: manage password.
@@ -319,7 +310,7 @@ module.exports = function (app, passport, nev) {
         });
     });
 
-    app.get('/deleteProfile', isLoggedIn, function (req, res) {
+    app.get('/delete_profile', isLoggedIn, function (req, res) {
         var user = req.user;
         removeUser(user, res);
     });
@@ -337,77 +328,35 @@ module.exports = function (app, passport, nev) {
             });
 
             return res.status(200).send('SUCCESS: Buy product success!');
-        } else {
-            return res.status(400).send('ERROR: Invalid data!');
         }
+        return res.status(400).send('ERROR: Invalid data!');
     });
 
     // SUBSCRIPTION =============================
     app.post('/subscription', isLoggedIn, function (req, res) {
         var user = req.user;
-        if (user.enableSubscription()) {
-            var body = JSON.parse(req.body.data);
-
-            if (body.hasOwnProperty('id') && body.hasOwnProperty('reference')) {
-                // ===== fastSpring.getOrder
-                fastSpring.getOrder(body.id)
-                    .then(function (data) {
-                        var order = JSON.parse(data);
-                        console.log('***Subscription order: ', order);
-                        if (order.hasOwnProperty('error')) {
-                            console.error('Order error: ', order.error);
-                            return res.status(500).send('ERROR: Subscription was failed!');
-                        }
-
-                        if (!order.items.length) {
-                            console.error('Order invalid length items.');
-                            return res.status(500).send('ERROR: Subscription was failed!');
-                        }
-
-                        user.set({
-                            application_state: ApplicationState.ACTIVE,
-                            subscription: JSON.stringify(Object.assign(body, {subscriptionId: order.items[0].subscription}))
-                        });
-                        user.save(function (err) {
-                            if (err) {
-                                console.error('Save subscription error: ', err);
-                                return res.status(500).send('ERROR: Subscription was failed!');
-                            }
-                        });
-
-                        console.log('***Subscription SUCCESS!');
-                        res.status(200).send('SUCCESS: Subscription success!');
-                    }).catch(function (error) {
-                    console.error('subscription catch: ', error);
+        var body = JSON.parse(req.body.data);
+        if (body.hasOwnProperty('id') && body.hasOwnProperty('reference')) {
+            user.updateSubscription(app.locals.fastspring_config, body.id, function (err) {
+                if (err) {
+                    console.error('Order error: ', err);
                     return res.status(500).send('ERROR: Subscription was failed!');
-                });
-                // =====
-            } else {
-                console.error('Body invalid data');
-                return res.status(400).send('ERROR: Invalid data!');
-            }
-        } else {
-            console.error('Subscription is already exist!');
-            return res.status(500).send('ERROR: Subscription is already exist!');
+                }
+
+                res.status(200).send('SUCCESS: Subscription success!');
+            });
         }
+        return res.status(400).send('ERROR: Invalid data!');
     });
 
     // CANCEL_SUBSCRIPTION ==============================
-    app.post('/cancel_subscription', User.checkSubscriptionStatus(app, 'active'), function (req, res) {
+    app.post('/cancel_subscription', isLoggedIn, function (req, res) {
         var user = req.user;
-        var subscr = user.getSubscription();
-        fastSpring.cancelSubscription(subscr.subscriptionId)
-            .then(function (data) {
-                var answer = JSON.parse(data);
-
-                if (answer.result === 'error') {
-                    throw new Error('Cancel subscription was failed.');
-                }
-                setTimeout(function () { // Note: redirect with timeout. Profile page not render with new data from fastspring...
-                    res.redirect('/profile');
-                }, 5000);
-            }).catch(function (error) {
-            console.log('cancelSubscription: ', error);
+        user.cancelSubscription(app.locals.fastspring_config, function (err) {
+            if (err) {
+                console.log(err);
+            }
+            res.redirect('/profile');
         });
     });
 
@@ -715,20 +664,30 @@ module.exports = function (app, passport, nev) {
             }
 
             var email = user.email;
+            var end_date = new Date();
+            end_date.setDate(end_date.getDate() + app.locals.project.trial_days);
+            user.application_end_date = end_date;
+            user.save(function (err) {
+                if (err) {
+                    console.error(err);
+                }
+            });
 
             // user folder
-            var dir = app.locals.site.users_directory + '/' + user.email;
+            var dir = gen_user_save_folder_path(user);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
             }
 
             console.log("confirm message sent to: " + email);
-            res.render('after_confirm.ejs');
+            req.login(user, function (err) {
+                if (err) {
+                    console.error(err);
+                    return res.status(404).send('ERROR: login to profile page FAILED');
+                }
+                return res.redirect('/profile');
+            });
         });
-    });
-
-    app.get('/after_confirm', function (req, res) {
-        res.render('after_confirm.ejs');
     });
 
     app.get('/welcome_callback', function (req, res) {
@@ -743,60 +702,63 @@ module.exports = function (app, passport, nev) {
         res.render('welcome/welcome_enterprise_callback.ejs');
     });
 
-    app.get('/refresh_subscriptions', isLoggedInAndSupport, function (req, res) {
-        User.find({"subscription": {"$exists": true, "$ne": ""}}, function (err, users) {
+    app.get('/get_subscriptions', isLoggedInAndSupport, function (req, res) {
+        User.find({"subscription.subscription_id": {$exists: true}}, function (err, users) {
             if (err) {
                 res.status(200).send({error: err});
                 return;
             }
 
-            var emails = [];
+            var emails_and_statuses = [];
             users.forEach(function (user) {
-                var subscr = user.getSubscription();
-                if (subscr) {
-                    fastSpring.getSubscription(subscr.subscriptionId)
-                        .then(function (data) {
-                            var subscription = JSON.parse(data);
-                            if (user.subscription_state !== subscription.state) {
-                                user.subscription_state = subscription.state;
-                                user.save(function (err) {
-                                    if (err) {
-                                        console.error('save user subscription state error: ', err);
-                                    }
-                                });
-                            }
-                        }).catch(function (error) {
-                            console.error('getSubscription: ', error);
-                        }
-                    );
-                    emails.push(user.email);
-                }
+                user.getSubscriptionState(app.locals.fastspring_config, function (err, state) {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+
+                    var user_state = {email: user.email, state: state};
+                    console.log(user_state);
+                    emails_and_statuses.push(user_state);
+                });
             });
-            res.status(200).send({emails: emails});
+            res.status(200).send({emails: emails_and_statuses});
         });
     });
 
-    app.get('/fix_exec_0', isLoggedInAndSupport, function (req, res) {
-        User.find({"exec_count": 0}, function (err, users) {
+    app.get('/get_order/:ORDER', isLoggedInAndSupport, function (req, res) {
+        var order = req.params.ORDER;
+        User.getOrder(app.locals.fastspring_config, order, function (err, order_data) {
             if (err) {
                 res.status(200).send({error: err});
                 return;
             }
 
-            var emails = [];
+            res.status(200).send({order: order_data});
+        });
+    });
+
+    app.get('/get_user_trial_life', isLoggedInAndSupport, function (req, res) {
+        User.find({}, function (err, users) {
+            if (err) {
+                res.status(200).send({error: err});
+                return;
+            }
+
+            var users_ttl = [];
+            var all_time = 0;
             users.forEach(function (user) {
-                if (user.statistic.length !== 0) {
-                    user.exec_count = user.statistic.length;
-                    user.save(function (err) {
-                        if (err) {
-                            console.error('save user exec_count state error: ', err);
-                        }
-                    });
-                    emails.push(user.email);
+                if (user.statistic.length && !user.subscription && !user.isPrimary()) {
+                    var first = user.statistic[0];
+                    var last = user.statistic[user.statistic.length - 1];
+                    var user_ttl = last['created_date'] - first['created_date'];
+                    if (user_ttl) {
+                        users_ttl.push(user_ttl);
+                        all_time += user_ttl;
+                    }
                 }
             });
-
-            res.status(200).send({emails: emails});
+            res.status(200).send({users_ttl: users_ttl, all_time: all_time});
         });
     });
 

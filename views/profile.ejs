@@ -52,7 +52,7 @@
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <a class="navbar-brand" href="#" style="padding: 10px 15px;">
-                            <img alt="Brand" src="logo32x32.png"/>
+                            <img alt="Brand" src="logo_32x32.png"/>
                             <%= site.title %>
                         </a>
                     </div>
@@ -74,7 +74,7 @@
             </nav>
             <div class="row">
                 <div class="col-md-12">
-                    <form action="/updateProfile" method="post" name="profileInfo"
+                    <form action="/update_profile" method="post" name="profileInfo"
                           onsubmit="return validateProfileForm()">
                         <div class="row">
                             <div class="col-md-6 mb30">
@@ -185,14 +185,14 @@
         </div>
     </div>
 
-    <% if (user.getSubscriptionState() && user.getSubscriptionState() !== 'active') { %>
-    <div class="alert alert-warning">Your subscription is <%= user.getSubscriptionState() %>. Resubscribe or contact the
-        administrator.
-    </div>
+    <% if (subscription_state && !(subscription_state === 'active' || subscription_state === 'canceled')) { %>
+        <div class="alert alert-warning">Your subscription is <%= subscription_state %>. Resubscribe or contact the
+            administrator.
+        </div>
     <% } %>
 
     <div class="row">
-        <% if (user.enableSubscription()) { %>
+        <% if (subscription_state !== 'active' && !user.isPrimary()) { %>
         <div class="row-content clear-after">
             <div class="container-subscription">
                 <div class="col-sm-3 box-subscription">
@@ -573,13 +573,15 @@
         <div class="well">
             <div class="row">
                 <div class="col-sm-4">
+                    <% if (!user.isBanned()) { %>
                     <form action="/build_installer_request" method="get" class="btn-verification">
                         <button type="submit" class="btn btn-success">Build last stable <%= project.name %> version
                         </button>
                     </form>
+                    <% } %>
                     <a href="mailto:<%- support.contact_email %>"><%- support.contact_email %></a>
                 </div>
-                <% if (user.canCancelSubscription()) { %>
+                <% if (subscription_state === 'active') { %>
                 <div class="col-sm-7">
                     <div class="row">
                         <div class="col-sm-12 text-right">
@@ -700,7 +702,7 @@
         e.preventDefault()
         var result = confirm('Delete account?');
         if (result) {
-            window.location.href = '/deleteProfile';
+            window.location.href = '/delete_profile';
         }
     }
 
