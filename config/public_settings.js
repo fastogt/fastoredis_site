@@ -6,10 +6,10 @@ module.exports = {
         version: '2.2.1',
         domain: 'fastoredis.com',
         trial_days: 15,
-        price_per_month: 6,
-        price_per_6_month: 33,
-        price_per_year: 60,
-        price_permanent: 240
+        price_per_month: 5.99,
+        price_per_6_month: 32.99,
+        price_per_year: 59.99,
+        price_permanent: 249.99
     },
 
     site: {
