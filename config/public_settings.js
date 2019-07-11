@@ -5,7 +5,7 @@ module.exports = {
         name_lowercase: 'fastoredis',
         version: '2.3.1',
         domain: 'fastoredis.com',
-        trial_days: 15,
+        trial_days: 7,
         price_per_month: 5.99,
         price_per_6_month: 32.99,
         price_per_year: 59.99,

@@ -7,7 +7,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('../app/models/user');
 var validate_email = require('../app/modules/validate_email'); // use this one for testing
 
-module.exports = function (nev, passport) {
+module.exports = function (nev, passport, banned_domains) {
 
     // =========================================================================
     // passport session setup ==================================================
@@ -83,7 +83,15 @@ module.exports = function (nev, passport) {
             req.flash('error', 'Invalid input.');
             return done(null, false);
         }
+
         email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
+        for (i = 0; i < banned_domains.length; ++i) {
+            if (email.endsWith('@' + banned_domains[i])) {
+                req.flash('error', 'Banned domain, please go to manager and ask him to buy licenses.');
+                return done(null, false);
+            }
+        }
+
         validate_email.validateEmail(email, function (err) {
             if (err) {
                 req.flash('error', 'Invalid email: ' + email + ', (error: ' + err + ').');
