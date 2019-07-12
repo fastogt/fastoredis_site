@@ -37,16 +37,17 @@
     <div class="col-sm-6 col-sm-offset-3">
         <h1><span class="fa fa-sign-in"></span> Sign up</h1>
         <% if (success_messages && success_messages.length > 0) { %>
-            <div class="alert alert-success"><%= success_messages %></div>
+        <div class="alert alert-success"><%= success_messages %></div>
         <% } %>
         <% if (error_messages && error_messages.length > 0) { %>
-            <div class="alert alert-danger"><%= error_messages %></div>
+        <div class="alert alert-danger"><%= error_messages %></div>
         <% } %>
 
         <!-- LOGIN FORM -->
         <form name="signUpForm" action="/signup" onsubmit="return validateForm()" method="post">
             <div class="form-group">
-                <label>Email (Professional email <%= 2 * project.trial_days %> day(s) trial)</label>
+                <label>Email <b>(For public emails <%= project.trial_days %> day(s) trial, for professional
+                        emails <%= 2 * project.trial_days %> day(s) trial)</b></label>
                 <input type="email" class="form-control" name="email">
             </div>
             <div class="form-group">
@@ -65,11 +66,11 @@
                 <label>Country</label>
                 <select class="form-control" name="country">
                     <% Object.keys(countries).forEach(function (key) { %>
-                        <% if (key == country) { %>
-                            <option value="<%- key %>" selected="selected"><%- countries[key] %></option>
-                        <% } else { %>
-                            <option value="<%- key %>"><%- countries[key] %></option>
-                        <% } %>
+                    <% if (key == country) { %>
+                    <option value="<%- key %>" selected="selected"><%- countries[key] %></option>
+                    <% } else { %>
+                    <option value="<%- key %>"><%- countries[key] %></option>
+                    <% } %>
                     <% }) %>
                 </select>
             </div>
